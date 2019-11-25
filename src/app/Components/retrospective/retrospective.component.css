@@ -1,0 +1,346 @@
+.mainContainer {
+  /* background-image: linear-gradient(to bottom, #2c82c9, #6bb9f0); */
+  background: #f3f3f3;
+  width: 100%;
+  height: auto;
+  position: relative;
+  padding: 8px 0px 0px 6px;
+  border-radius: 4px;
+
+}
+
+.retroContainer {
+  position: relative;
+  width: 100%;
+  height: 90vh;
+  font-family: Arial,
+    Helvetica,
+    sans-serif;
+  /* background: linear-gradient(45deg, #2d89ec 0%, rgb(110, 181, 181) 100%); */
+}
+
+
+.flex-containerColumn {
+  display: flex;
+  width: 33%;
+  flex-direction: column;
+  background: #d7e8bc;
+  
+}
+
+.flex-containerRight {
+  /* background-color: #f1f1f1; */
+  margin: 10px;
+  padding: 20px;
+  font-size: 30px;
+}
+
+.flex-container {
+  display: flex;
+}
+
+.flex-container>div {
+  width: 32%;
+  margin: 9px;
+  padding: 2px 3px;
+  font-size: 18px;
+  text-align: left;
+  border: 1px red;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px 2px rgba(70, 70, 70, 0.98);
+}
+
+.retroTypeHeading {
+  margin: 5px;
+}
+
+.retroPoint {
+  position: relative;
+  padding: 2px 14px;
+  margin: 2px 2px;
+  text-align: left;
+  border-radius: 4px;
+  min-height: 55px;
+ box-shadow:  0px 0px 10px 1px rgba(0, 0, 0, 0.3);
+}
+
+.retroPoint::before {
+  width: 100px;
+}
+
+.retroPoint::after {
+  width: 100px;
+}
+
+/* .vote {
+  position: absolute;
+  top: 0%;
+  left: 90%;
+} */
+
+.flex-containerColumn>span {
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-size: 15px;
+  cursor: pointer;
+  margin: 9px 5px;
+  font-weight: 500;
+}
+
+
+.wentWellTextArea {
+  padding: 2px 2px;
+  margin: 2px 1px;
+  background: transparent;
+  box-sizing: border-box;
+  box-shadow: 1px -3px 10px 0px rgba(39, 38, 38, 0.61);
+  border-radius: 5px;
+}
+
+.AddTextEditor {
+  border: 1px solid #1b8010;
+  background: #1b8010;
+  border-radius: 4px;
+  width: 12%;
+  height: auto;
+  padding: 0.4%;
+  float: right;
+  font-size: large;
+  font-weight: 400;
+  color: black;
+  cursor: pointer;
+  margin-left: 2px;
+}
+
+.closeTextEditor {
+  border: 1px solid #bd213040;
+  background: #bd213040;
+  border-radius: 4px;
+  width: 12%;
+  height: auto;
+  padding: 0.4%;
+  float: right;
+  font-size: large;
+  font-weight: 400;
+  color: black;
+  cursor: pointer;
+}
+
+.closeTextEditor:hover {
+  color: white;
+  box-shadow: 1px 5px 8px 1px rgba(140, 230, 36, 0.45);
+}
+
+.AddTextEditor:hover {
+  color: white;
+  box-shadow: 1px 5px 8px 1px rgba(140, 230, 36, 0.45);
+}
+
+
+.well {
+  background: #f3f3f3;
+
+}
+
+.wrong {
+  background: #f3f3f3;
+
+}
+
+.textEditor {
+  overflow: hidden;
+  border: 2px solid #888;
+  border-radius: 4px;
+  width: 100%;
+}
+
+
+
+.black_overlay {
+  display: block;
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  z-index: 1001;
+  -moz-opacity: 0.8;
+  opacity: .80;
+  filter: alpha(opacity=80);
+}
+
+.textAreaContainer {
+  display: block;
+  position: absolute;
+  top: 25%;
+  left: 25%;
+  width: 50%;
+  height: 46%;
+  padding: 16px;
+  border: 1px solid orange;
+  border-radius: 4px;
+  background-color: white;
+  z-index: 1002;
+  overflow: auto;
+}
+
+
+
+
+i {
+  border: solid black;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+}
+
+.right {
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+}
+
+.left {
+  transform: rotate(135deg);
+  -webkit-transform: rotate(135deg);
+}
+
+.up {
+  transform: rotate(-135deg);
+  -webkit-transform: rotate(-135deg);
+}
+
+.down {
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+}
+
+
+.retroPoint:hover {
+  cursor: pointer;
+}
+
+
+
+
+/* Draggable*/
+
+.drag-border {
+  border: #ff525b dashed 2px;
+}
+
+.drag-over {
+  border: #ff525b dashed 2px;
+}
+
+.drag-hint {
+  border: #ffc100 dashed 2px;
+  /*transition: all .2s ease-in-out;*/
+  /*transform: scale(1.05);*/
+}
+
+.drag-target-border {
+  border: #00bfff dashed 2px;
+}
+
+.drag-handle {
+  cursor: move; /* fallback if grab cursor is unsupported */
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+
+.drag-handle:active { 
+  cursor: grabbing;
+  cursor: -moz-grabbing;
+  cursor: -webkit-grabbing;
+}
+
+/* Droppable */
+
+.drag-hint-border {
+  border: #3c763d dashed 2px;
+}
+
+.drag-over-border {
+  border: #fbbc05 dashed 2px;
+}
+
+.drag-transit {
+  border: #3500FF dashed 2px;
+}
+
+
+.container{
+  width: 1200px;
+  height: 1200px;
+  padding: 30px;
+  background-color: black;
+}
+
+.voteContainer {
+  position: absolute;
+  top: 5%;
+  left: 92%;
+  cursor: pointer;
+  padding: 0px 0px;
+}
+
+.vote {
+  position: relative;
+  width: 14px;
+  height: 14px;
+  left: 99%;
+}
+
+.vote:before,
+.vote:after{
+      content: "";
+      position: absolute;
+      background-color: green;
+      transition: transform 0.25s ease-out;
+  }
+
+  /* Vertical line */
+.vote:before{
+      top: 0;
+      left: 50%;
+      width: 4px;
+      height: 100%;
+      margin-left: -2px;
+  }
+
+  /* horizontal line */
+.vote:after{
+      top: 50%;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      margin-top: -2px;
+  }
+
+
+
+  .voteDown {
+    position: relative;
+    width: 14px;
+    height: 14px;
+    left: 99%;
+    margin-top: 5px;
+  }
+  
+  .voteDown:before,
+  .voteDown:after{
+        content: "";
+        position: absolute;
+        background-color: red;
+        transition: transform 0.25s ease-out;
+    }
+  
+  /* horizontal line */
+  .voteDown:after{
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    margin-top: 2px;
+  }

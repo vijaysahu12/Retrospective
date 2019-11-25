@@ -1,0 +1,57 @@
+<div class="mainContainer">
+  <div class="retroContainer">
+    <div class="flex-container">
+      <div [@listAnimation]="wentWell.length" class="flex-containerColumn">
+        <div class='retroTypeHeading'><strong> What went well </strong></div>
+        <div draggable="true" dragClass="drag-over" dragOverClass="drag-target-border" (onDrop)="onDropOfItem($event)" class="retroPoint well" *ngFor='let item of wentWell'>
+          {{item.Message}}
+        </div>
+        <span (click)="addItem(this.retroType.well)"> + Add another comment...</span>
+        <div [@fadeInOut]='textEditorForWell' class="wentWellTextArea" *ngIf='textEditorForWell'>
+          <textarea class="border-1 textEditor" cols="50" rows="2" [(ngModel)]='textAreaValue'
+            placeholder='What went well during the sprint...' #textEditor (keyup.enter)='onTextEnter(textEditor.value)'>
+              </textarea>
+          <button class="AddTextEditor" (click)='onTextEnter(textEditor.value)'>Add</button>
+          <button class="closeTextEditor" (click)='toggle()'>Cancel</button>
+        </div>
+      </div>
+      <div  [@listAnimation]="wentWrong.length"  class="flex-containerColumn">
+        <div class='retroTypeHeading'><strong> What didn't go well</strong></div>
+        <div class="retroPoint wrong" *ngFor='let item of wentWrong'>
+            {{item.Message}}
+          <!-- <div style="width:100%">
+            
+            <div style="width:20px">
+              <svg xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            </div>
+            <div>{{item.Message}}</div>
+          </div> -->
+        </div>
+        <span (click)="addItem(this.retroType.wrong)"> + Add another comment...</span>
+        <div [@fadeInOut]='textEditorForWrong' class="wentWellTextArea" *ngIf='textEditorForWrong'>
+          <textarea class="border-1 textEditor" cols="50" rows="2" [(ngModel)]='textAreaValue'
+            placeholder='What did not went well during the sprint...' #textEditor (keyup.enter)='onTextEnter(textEditor.value)'>
+              </textarea>
+          <button class="AddTextEditor " (click)='onTextEnter(textEditor.value)'>Add</button>
+          <button class="closeTextEditor" (click)='toggle()'>Cancel</button>
+        </div>
+      </div>
+      <div  [@listAnimation]="wentWell.length"  class="flex-containerColumn">
+        <div class='retroTypeHeading'><strong> Action Items</strong></div>
+        <div droppable class="retroPoint action" *ngFor='let item of actionTaken'>
+          {{item.Message}}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div [@shrinkOut]='textEditorEnable' class="flex-container textAreaContainer" *ngIf='textEditorEnable'>
+    <label class=""><strong>Retro Comment: </strong> </label>
+    <textarea class="border-1 textEditor" cols="97" rows="9" [(ngModel)]='textAreaValue'
+      placeholder='Add new retro points.' #textEditor (keyup.enter)='onTextEnter(textEditor.value)'>
+  </textarea>
+    <button class="AddTextEditor" (click)='onTextEnter(textEditor.value)'>Add</button>
+    <button class="closeTextEditor" (click)='toggle()'>Close</button>
+  </div>
+  <div class="black_overlay" *ngIf='textEditorEnable' (click)='toggle()'></div> -->
+</div>
