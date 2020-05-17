@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { RetrospectiveDbModel, RetrospectiveModel, CardColors } from '../Modals/Retrospective.model';
 import { HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { min, max } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
@@ -58,19 +59,19 @@ export class RetrospectiveService implements OnInit {
 
   GetRandomColor() {
     const randomColor: CardColors[] = [{
-      ColorCode: '#63b7af',
+      ColorCode: '#faf3dd',
       ColorId: 1
     }, {
-      ColorCode: '#63b7af',
+      ColorCode: '#f4acb7',
       ColorId: 2
     }, {
-      ColorCode: '#63b7af',
+      ColorCode: '#74c69d',
       ColorId: 3
     }, {
-      ColorCode: '#63b7af',
+      ColorCode: '#979dac',
       ColorId: 4
     }, {
-      ColorCode: '#63b7af',
+      ColorCode: '#00bbf9',
       ColorId: 5
     }, {
       ColorCode: '#63b7af',
@@ -79,13 +80,10 @@ export class RetrospectiveService implements OnInit {
   }
   GetColorForCardRandom() {
 
-    const colors = ['aqua', 'blue', 'fuchsia', 'gray', 'green',
-      'lime', 'maroon', 'navy', 'olive', 'orange', 'purple', 'red',
-      'silver', 'teal', 'white', 'yellow'];
+    const colors = ['#faf3dd', '#f4acb7', '#74c69d', '#979dac', '#00bbf9',
+      '#63b7af', '#f9c74f', '#fe938c', '#16697a', '#ed6a5a', '#706677', '#9d4edd',
+      '#ff5d8f', '#1b998b', '#233d4d', '#f4f482'];
 
-
-    const i = Math.floor(Math.random() * 4);
-    return colors[i];
+    return colors[Math.floor(Math.random() * (16 - 0)) + 0];
   }
-
 }

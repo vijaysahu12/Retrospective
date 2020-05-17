@@ -1,4 +1,5 @@
 export class RetrospectiveModel {
+    RetroId: number;
     Message: string;
     SprintId: number;
     Type: RetroType;

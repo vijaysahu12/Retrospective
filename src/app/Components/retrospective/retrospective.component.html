@@ -5,25 +5,25 @@
         <div class='retroTypeHeading'>
           <div class="flex-item"><strong> What went well </strong></div>
           <div class="raw-item">
-           
             <img (click)="addItem(this.retroType.well)" class="plusIcon" src="../../../assets/icons/plus.png" />
-          
+          </div>
         </div>
-        </div>
-        <div draggable="true" dragClass="drag-over" dragOverClass="drag-target-border" (onDrop)="onDropOfItem($event)"
+
+        <div (click)="onRetroItemClick(item.RetroId)" draggable="true" [id]="'div_'+ item.RetroId" (dragstart)="drag($event)"
           [style.background-color]='item.ColorCode' class="retroPoint well" *ngFor='let item of wentWell'>
           <div>{{item.Message}}</div>
+          <div> <img (click)="ConvertDivToText($event,item.RetroId)" class="plusIcon" src="../../../assets/icons/edit.png" /></div>
         </div>
 
         <div [@fadeInOut]='textEditorForWell' class="wentWellTextArea" *ngIf='textEditorForWell'>
-          <textarea class="border-1 textEditor" cols="50" rows="2" [(ngModel)]='textAreaValue'
-            placeholder='Comment' #textEditor (keyup.enter)='onTextEnter(textEditor.value)'>
+          <textarea id="txtAreaWrong" class="border-1 textEditor" cols="50" rows="2" [(ngModel)]='textAreaValue' placeholder='Comment'
+            #textEditor (keyup.enter)='onTextEnter(textEditor.value)'>
           </textarea>
           <!-- <button class="AddTextEditor" (click)='onTextEnter(textEditor.value)'>Add</button>
           <button class="closeTextEditor" (click)='toggle()'>Cancel</button> -->
         </div>
       </div>
-      <div [@listAnimation]="wentWrong" class="flex-containerColumn">
+      <div [@listAnimation]="wentWrong" class="flex-containerColumn ">
         <div class='retroTypeHeading'>
           <div class="flex-item"><strong> What didn't go well</strong></div>
           <div class="raw-item">
@@ -31,35 +31,27 @@
           </div>
 
         </div>
-        <div [style.background-color]='item.ColorCode' class="retroPoint wrong" *ngFor='let item of wentWrong'>
-          <div >{{item.Message}}</div>
+        <div draggable="true" dragClass="drag-over" dragOverClass="drag-target-border" (dragstart)="drag($event)"
+          [id]="'div_'+ item.RetroId" [style.background-color]='item.ColorCode' class="retroPoint wrong"
+          *ngFor='let item of wentWrong'>
+          <div>{{item.Message}}</div>
+          <div> <img (click)="ConvertDivToText($event,item.RetroId)" class="plusIcon" src="../../../assets/icons/edit.png" /></div>
         </div>
 
         <div [@fadeInOut]='textEditorForWrong' class="wentWellTextArea" *ngIf='textEditorForWrong'>
-          <textarea class="border-1 textEditor" cols="50" rows="2" [(ngModel)]='textAreaValue'
-            placeholder='Comment' #textEditor
-            (keyup.enter)='onTextEnter(textEditor.value)'>
+          <textarea id="txtAreaWell" class="border-1 textEditor" cols="50" rows="2" [(ngModel)]='textAreaValue' placeholder='Comment'
+            #textEditor (keyup.enter)='onTextEnter(textEditor.value)'>
               </textarea>
-          <!-- <button class="AddTextEditor " (click)='onTextEnter(textEditor.value)'>Add</button>
-          <button class="closeTextEditor" (click)='toggle()'>Cancel</button> -->
         </div>
       </div>
-      <div [@listAnimation]="wentWell" class="flex-containerColumn">
+      <div [@listAnimation]="wentWell" class="flex-containerColumn RetroActionItem">
         <div class='retroTypeHeading'><strong> Action Items</strong></div>
-        <div droppable class="retroPoint action" *ngFor='let item of actionTaken'>
-          <div [style.background-color]='item.ColorCode'>{{item.Message}}</div>
+        <div style="min-height:calc(100% - 50px); padding-bottom: 10px;" (drop)="drop($event)"
+          (dragover)="allowDrop($event)">
+          <div class="retroPoint action" *ngFor='let item of actionTaken'>
+            <div [style.background-color]='item.ColorCode'>{{item.Message}}</div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-
-  <!-- <div [@shrinkOut]='textEditorEnable' class="flex-container textAreaContainer" *ngIf='textEditorEnable'>
-    <label class=""><strong>Retro Comment: </strong> </label>
-    <textarea class="border-1 textEditor" cols="97" rows="9" [(ngModel)]='textAreaValue'
-      placeholder='Add new retro points.' #textEditor (keyup.enter)='onTextEnter(textEditor.value)'>
-  </textarea>
-    <button class="AddTextEditor" (click)='onTextEnter(textEditor.value)'>Add</button>
-    <button class="closeTextEditor" (click)='toggle()'>Close</button>
-  </div>
-  <div class="black_overlay" *ngIf='textEditorEnable' (click)='toggle()'></div> -->
-</div>
