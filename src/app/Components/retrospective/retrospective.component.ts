@@ -53,7 +53,7 @@ import { RetroType, RetrospectiveModel, RetrospectiveDbModel } from 'src/app/Mod
   ]
 })
 export class RetrospectiveComponent implements OnInit {
-
+  colorCodeIs: 'red';
   textAreaValue = '';
   textEditorForWell = false;
   textEditorForWrong = false;
@@ -98,7 +98,8 @@ export class RetrospectiveComponent implements OnInit {
           Editable: true,
           Type: RetroType.well,
           VoteDown: 0,
-          VoteUp: 0
+          VoteUp: 0,
+          ColorCode : this.retroService.GetColorForCardRandom()
         });
 
         this.AddComment(this.wentWell[this.wentWell.length - 1]);
@@ -110,13 +111,15 @@ export class RetrospectiveComponent implements OnInit {
           VoteDown: 0,
           VoteUp: 0,
           Editable: true,
-          Type: RetroType.wrong
+          Type: RetroType.wrong,
+          ColorCode : this.retroService.GetColorForCardRandom()
         });
 
         this.AddComment(this.wentWrong[this.wentWrong.length - 1]);
       }
       this.textAreaValue = '';
     }
+    this.hideShowTextEditor();
   }
 
   toggle() {

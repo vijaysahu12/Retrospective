@@ -1,6 +1,6 @@
 .mainContainer {
   /* background-image: linear-gradient(to bottom, #2c82c9, #6bb9f0); */
-  background: #f3f3f3;
+  /* background: #f3f3f3; */
   width: 100%;
   height: auto;
   position: relative;
@@ -12,7 +12,7 @@
 .retroContainer {
   position: relative;
   width: 100%;
-  height: 90vh;
+  height: 90%;
   font-family: Arial,
     Helvetica,
     sans-serif;
@@ -24,8 +24,7 @@
   display: flex;
   width: 33%;
   flex-direction: column;
-  background: #d7e8bc;
-  
+  /* background: #c8e49c; */
 }
 
 .flex-containerRight {
@@ -39,7 +38,7 @@
   display: flex;
 }
 
-.flex-container>div {
+.flex-container > div {
   width: 32%;
   margin: 9px;
   padding: 2px 3px;
@@ -47,20 +46,39 @@
   text-align: left;
   border: 1px red;
   border-radius: 10px;
-  box-shadow: 0px 0px 10px 2px rgba(70, 70, 70, 0.98);
+  /* box-shadow: 0px 0px 10px 2px rgba(70, 70, 70, 0.98); */
 }
 
 .retroTypeHeading {
   margin: 5px;
+  display: flex;
+  flex-direction: row;
+  
 }
 
+.retroTypeHeading > .plus.pngflex-item {
+  flex: auto;
+}
+
+.retroTypeHeading > .raw-item {
+  width: 5rem;
+  cursor: pointer;
+}
+
+.plusIcon {
+ width: 26px;
+ height: 26px;
+ margin-top: -4px;
+ float: right;
+ /* background: url('../../../assets/icons/plus.png') no-repeat center center fixed;; */
+}
 .retroPoint {
   position: relative;
-  padding: 2px 14px;
+  padding: 18px 4px;
   margin: 2px 2px;
   text-align: left;
   border-radius: 4px;
-  min-height: 55px;
+  /* min-height: 55px; */
  box-shadow:  0px 0px 10px 1px rgba(0, 0, 0, 0.3);
 }
 
@@ -141,8 +159,13 @@
 
 }
 
+
+textarea {
+  resize: vertical;
+}
+
 .wrong {
-  background: #f3f3f3;
+  /* background: #f3f3f3; */
 
 }
 
@@ -150,7 +173,7 @@
   overflow: hidden;
   border: 2px solid #888;
   border-radius: 4px;
-  width: 100%;
+  width: 98%;
 }
 
 

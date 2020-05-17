@@ -6,6 +6,7 @@ export class RetrospectiveModel {
     VoteDown: number;
     Editable: boolean;
     CreatedBy: number;
+    ColorCode: string;
 }
 
 export enum RetroType {
@@ -19,4 +20,9 @@ export class RetrospectiveDbModel {
     Message: string;
     SprintId: number;
     CreatedDate: Date;
+}
+
+export class CardColors {
+    ColorCode: string;
+    ColorId: number;
 }
