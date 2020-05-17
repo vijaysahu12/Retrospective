@@ -247,14 +247,21 @@ export class RetrospectiveComponent implements OnInit {
     const imgRef = divInfo.nextSibling.firstElementChild as HTMLImageElement;
     imgRef.style.visibility = 'hidden';
 
-    textBox.addEventListener('click', () => {
-      debugger;
-      const textRef = document.getElementById('attribute') as HTMLInputElement;
-      const imgRefShow = textRef.parentElement.nextSibling as HTMLImageElement;
-      imgRefShow.getElementsByTagName('img')[0].style.visibility = 'visible';
-      textRef.parentElement.innerHTML = textRef.value;
-      textRef.setAttribute('display', 'block');
-      textRef.remove();
+    textBox.addEventListener('keyup', (ev) => {
+      // if (ev.srcElement.getAttribute('class') === 'plusIcon') {
+      //   //event handling code
+      // }
+
+      // Number 13 is the "Enter" key on the keyboard
+      // tslint:disable-next-line: deprecation
+      if (ev.keyCode === 13) {
+        const textRef = document.getElementById('attribute') as HTMLInputElement;
+        const imgRefShow = textRef.parentElement.nextSibling as HTMLImageElement;
+        imgRefShow.getElementsByTagName('img')[0].style.visibility = 'visible';
+        textRef.parentElement.innerHTML = textRef.value;
+        textRef.setAttribute('display', 'block');
+        textRef.remove();
+      }
     });
   }
 
