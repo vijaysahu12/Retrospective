@@ -83,7 +83,9 @@ export class RetrospectiveService implements OnInit {
     const colors = ['#faf3dd', '#f4acb7', '#74c69d', '#979dac', '#00bbf9',
       '#63b7af', '#f9c74f', '#fe938c', '#16697a', '#ed6a5a', '#706677', '#9d4edd',
       '#ff5d8f', '#1b998b', '#233d4d', '#f4f482'];
-
-    return colors[Math.floor(Math.random() * (16 - 0)) + 0];
+    return '#ffff94';
+    // return colors[Math.floor(Math.random() * (16 - 0)) + 0];
   }
 }
+
+

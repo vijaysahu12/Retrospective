@@ -8,10 +8,13 @@ import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { FilterRetroListPipe } from './Pipes/filter-retro-list.pipe';
 @NgModule({
   declarations: [
     AppComponent,
-    RetrospectiveComponent
+    RetrospectiveComponent,
+    FilterRetroListPipe
   ],
   imports: [
     BrowserModule,

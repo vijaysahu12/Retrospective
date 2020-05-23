@@ -10,7 +10,7 @@
         </div>
 
         <div (click)="onRetroItemClick(item.RetroId)" draggable="true" [id]="'div_'+ item.RetroId" (dragstart)="drag($event)"
-          [style.background-color]='item.ColorCode' class="retroPoint well" *ngFor='let item of wentWell'>
+          [style.background-color]='item.ColorCode' class="retroPoint well" *ngFor='let item of RetroCommentsList'>
           <div>{{item.Message}}</div>
           <div> <img (click)="ConvertDivToText($event,item.RetroId)" class="plusIcon" src="../../../assets/icons/edit.png" /></div>
         </div>
@@ -33,7 +33,7 @@
         </div>
         <div draggable="true" dragClass="drag-over" dragOverClass="drag-target-border" (dragstart)="drag($event)"
           [id]="'div_'+ item.RetroId" [style.background-color]='item.ColorCode' class="retroPoint wrong"
-          *ngFor='let item of wentWrong'>
+          *ngFor='let item of RetroCommentsList | filterRetroList : this.retroType.wrong'>
           <div>{{item.Message}}</div>
           <div> <img (click)="ConvertDivToText($event,item.RetroId)" class="plusIcon" src="../../../assets/icons/edit.png" /></div>
         </div>
@@ -48,7 +48,7 @@
         <div class='retroTypeHeading'><strong> Action Items</strong></div>
         <div style="min-height:calc(100% - 50px); padding-bottom: 10px;" (drop)="drop($event)"
           (dragover)="allowDrop($event)">
-          <div class="retroPoint action" *ngFor='let item of actionTaken'>
+          <div class="retroPoint action" *ngFor='let item of  RetroCommentsList | filterRetroList : this.retroType.action'>
             <div [style.background-color]='item.ColorCode'>{{item.Message}}</div>
           </div>
         </div>
