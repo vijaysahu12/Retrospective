@@ -1,13 +1,13 @@
 export class RetrospectiveModel {
-    RetroId: number;
-    Message: string;
-    SprintId: number;
-    Type: RetroType;
-    VoteUp: number;
-    VoteDown: number;
-    Editable: boolean;
-    CreatedBy: number;
-    ColorCode: string;
+    retroId: number;
+    message: string;
+    sprintId: number;
+    type: RetroType;
+    voteUp: number;
+    voteDown: number;
+    editable: boolean;
+    createdBy: number;
+    colorCode: string;
 }
 
 export enum RetroType {

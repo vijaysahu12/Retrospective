@@ -9,15 +9,15 @@
           </div>
         </div>
 
-        <div (click)="onRetroItemClick(item.RetroId)" draggable="true" [id]="'div_'+ item.RetroId" (dragstart)="drag($event)"
-          [style.background-color]='item.ColorCode' class="retroPoint well" *ngFor='let item of RetroCommentsList'>
-          <div>{{item.Message}}</div>
-          <div> <img (click)="ConvertDivToText($event,item.RetroId)" class="plusIcon" src="../../../assets/icons/edit.png" /></div>
+        <div (click)="onRetroItemClick(item.retroId)" draggable="true" [id]="'div_'+ item.retroId" (dragstart)="drag($event)"
+          [style.background-color]='item.ColorCode' class="retroPoint well" *ngFor='let item of (RetroCommentsList | filterRetroList : this.retroType.well)'>
+          <div>{{item.message}}</div>
+          <div> <img (click)="ConvertDivToText($event,item.retroId)" class="plusIcon" src="../../../assets/icons/edit.png" /></div>
         </div>
 
         <div [@fadeInOut]='textEditorForWell' class="wentWellTextArea" *ngIf='textEditorForWell'>
           <textarea id="txtAreaWrong" class="border-1 textEditor" cols="50" rows="2" [(ngModel)]='textAreaValue' placeholder='Comment'
-            #textEditor (keyup.enter)='onTextEnter(textEditor.value)'>
+            #textEditor (keyup.enter)='onTextEnter(textEditor.value , this.retroType.well)'>
           </textarea>
           <!-- <button class="AddTextEditor" (click)='onTextEnter(textEditor.value)'>Add</button>
           <button class="closeTextEditor" (click)='toggle()'>Cancel</button> -->
@@ -32,15 +32,15 @@
 
         </div>
         <div draggable="true" dragClass="drag-over" dragOverClass="drag-target-border" (dragstart)="drag($event)"
-          [id]="'div_'+ item.RetroId" [style.background-color]='item.ColorCode' class="retroPoint wrong"
+          [id]="'div_'+ item.retroId" [style.background-color]='item.ColorCode' class="retroPoint wrong"
           *ngFor='let item of RetroCommentsList | filterRetroList : this.retroType.wrong'>
-          <div>{{item.Message}}</div>
-          <div> <img (click)="ConvertDivToText($event,item.RetroId)" class="plusIcon" src="../../../assets/icons/edit.png" /></div>
+          <div>{{item.message}}</div>
+          <div> <img (click)="ConvertDivToText($event,item.retroId)" class="plusIcon" src="../../../assets/icons/edit.png" /></div>
         </div>
 
         <div [@fadeInOut]='textEditorForWrong' class="wentWellTextArea" *ngIf='textEditorForWrong'>
           <textarea id="txtAreaWell" class="border-1 textEditor" cols="50" rows="2" [(ngModel)]='textAreaValue' placeholder='Comment'
-            #textEditor (keyup.enter)='onTextEnter(textEditor.value)'>
+            #textEditor (keyup.enter)='onTextEnter(textEditor.value, this.retroType.wrong)'>
               </textarea>
         </div>
       </div>
@@ -49,7 +49,7 @@
         <div style="min-height:calc(100% - 50px); padding-bottom: 10px;" (drop)="drop($event)"
           (dragover)="allowDrop($event)">
           <div class="retroPoint action" *ngFor='let item of  RetroCommentsList | filterRetroList : this.retroType.action'>
-            <div [style.background-color]='item.ColorCode'>{{item.Message}}</div>
+            <div [style.background-color]='item.ColorCode'>{{item.message}}</div>
           </div>
         </div>
       </div>

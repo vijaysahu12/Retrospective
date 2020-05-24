@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { trigger, state, style, transition, animate, query, stagger, keyframes } from '@angular/animations';
 import { RetrospectiveService } from '../../Service/retrospective.service';
 import { RetroType, RetrospectiveModel, RetrospectiveDbModel } from '../../Modals/Retrospective.model';
-import * as signalR from '@microsoft/signalr';
+import { HubConnectionService } from 'src/app/Service/hub-connection.service';
+
 @Component({
   selector: 'app-retrospective',
   templateUrl: './retrospective.component.html',
@@ -61,72 +62,26 @@ export class RetrospectiveComponent implements OnInit {
   retroType = RetroType;
   RetroCommentsList: RetrospectiveModel[] = [];
   retroRquestModel: RetrospectiveDbModel;
-  connection: signalR.HubConnection;
-  hubMethodName = 'newMessage';
-  MessageReceiver = 'messageReceived';
-  singalRUrl = 'https://localhost:44338/chat';
 
-  constructor(private retroService: RetrospectiveService) { }
+  constructor(private retroService: RetrospectiveService , private hubConnection: HubConnectionService) { }
 
   ngOnInit() {
-    this.GetCommentList();
-    this.BuildConnection();
-    this.StartConnection();
     // this.sendMessage();
-  }
-  BuildConnection() {
-    console.log('BuildConnection() Called.');
-    this.connection = new signalR.HubConnectionBuilder()
-      .withUrl(this.singalRUrl)
-      .withAutomaticReconnect().configureLogging(signalR.LogLevel.Information)
-      .build();
-  }
-
-  StartConnection() {
-    console.log('StartConnection() called');
-
-    this.connection
-      .start()
-      .then(() => {
-        console.log('Connection Started!');
-        this.RegisterSignalEvents();
-      })
-      .catch(err => {
-        console.log('Error while establishing a connection :( ' + err);
-      });
-
-  }
-
-  RegisterSignalEvents() {
-    console.log('RegisterSignalEvents() called');
-    this.connection.on(this.MessageReceiver, (username: string, data: any) => {
-      this.RetroCommentsList.push({
-        RetroId: 5,
-        ColorCode: data.colorCode,
-        CreatedBy: 1,
-        Editable: true,
-        Message: data.message,
-        SprintId: 1,
-        Type: data.type === '1' ? RetroType.well : RetroType.wrong,
-        VoteDown: 0,
-        VoteUp: 0
-      });
-
-      console.log('Received Message.');
-      // this.sendMessage();
+    this.RetroCommentsList = this.retroService.GetCommentList();
+    this.hubConnection.dataReceived.subscribe(msg => {
+      const ll = {
+        retroId: msg.retroId,
+        message: msg.message,
+        sprintId: msg.sprintId,
+        createdBy: msg.createdBy,
+        editable: msg.editable,
+        colorCode: msg.colorCode,
+        type: msg.type,
+        voteDown: 0,
+        voteUp: 0
+      };
+      this.RetroCommentsList = this.RetroCommentsList.concat(ll);
     });
-  }
-
-  sendMessage(msg: RetrospectiveModel): void {
-    console.log('sendMessage() Called.');
-    const data = {
-      Message: msg.Message,
-      Type: msg.Type.toString(),
-      ColorCode: msg.ColorCode
-    };
-    this.connection
-      .invoke(this.hubMethodName, 'vj', data).finally()
-      .catch(err => console.log(err));
   }
 
   addItem(actionType: RetroType) {
@@ -144,22 +99,20 @@ export class RetrospectiveComponent implements OnInit {
     }
   }
 
-  onTextEnter(event) {
+  onTextEnter(event , retType: RetroType) {
     if (event !== undefined && event != null && event !== '' && event.toString().trim().length > 1) {
-      this.sendMessage(this.RetroCommentsList[0]);
-      console.log('well ');
-      this.RetroCommentsList.push({
-        RetroId: 1,
-        Message: event,
-        SprintId: 1,
-        CreatedBy: 1,
-        Editable: true,
-        Type: RetroType.well,
-        VoteDown: 0,
-        VoteUp: 0,
-        ColorCode: this.retroService.GetColorForCardRandom()
-      });
-
+      const dd: RetrospectiveModel = {
+        retroId: 0,
+        message: event,
+        sprintId: 1,
+        createdBy: 1,
+        editable: true,
+        type: retType,
+        voteDown: 0,
+        voteUp: 0,
+        colorCode: this.retroService.GetColorForCardRandom()
+      };
+      this.hubConnection.SendMessage(dd);
       this.textAreaValue = '';
     }
     this.hideShowTextEditor();
@@ -174,12 +127,6 @@ export class RetrospectiveComponent implements OnInit {
     this.retroService.GetRetroComment(this.retroRquestModel).subscribe(res => { console.log(res); });
   }
 
-  AddComment(retroModel: RetrospectiveModel) {
-    this.connection.send('newMessage', '', retroModel.Message)
-      .then(() => console.log('msg send'));
-    this.retroService.AddRetroComment(retroModel).subscribe(res => { console.log(res); });
-  }
-
   UpdateComment() {
     this.retroService.UpdateRetroComment(this.retroRquestModel).subscribe(res => { console.log(res); });
   }
@@ -189,23 +136,23 @@ export class RetrospectiveComponent implements OnInit {
   }
 
   onRetroItemClick(item: number) {
-    const dd = this.RetroCommentsList.filter(x => x.RetroId === item)[0];
-    if (dd.Type === RetroType.well) {
+    const dd = this.RetroCommentsList.filter(x => x.retroId === item)[0];
+    if (dd.type === RetroType.well) {
 
-    } else if (dd.Type === RetroType.wrong) {
+    } else if (dd.type === RetroType.wrong) {
     }
   }
 
   ConvertDivToText(event: any, RetroId: number) {
 
-    const retroObj = this.RetroCommentsList.filter(x => x.RetroId === RetroId)[0];
+    const retroObj = this.RetroCommentsList.filter(x => x.retroId === RetroId)[0];
     const textBox = document.createElement('textarea');
     textBox.setAttribute('id', 'attribute');
     textBox.setAttribute('class', 'textEditor');
     textBox.setAttribute('rows', '5');
     textBox.setAttribute('cols', '38');
 
-    textBox.value = retroObj.Message;
+    textBox.value = retroObj.message;
     const divInfo = event.currentTarget.parentElement.previousSibling;
     divInfo.innerText = '';
     divInfo.setAttribute('display', 'none');
@@ -252,78 +199,6 @@ export class RetrospectiveComponent implements OnInit {
   }
   notAllowDrop(ev) {
     ev.preventDefault();
-  }
-  GetCommentList() {
-
-
-    // this.retroService.GetRetroCommentList(1).subscribe(res => {
-    //   console.log(res);
-    //   this.RetroCommentsList = res;
-
-    //   this.wentWell = res.filter(x => x.Type === RetroType.well);
-    //   this.wentWrong = res.filter(x => x.Type === RetroType.wrong);
-    //   this.actionTaken = res.filter(x => x.Type === RetroType.action);
-
-    // });
-
-    this.RetroCommentsList.push({
-      RetroId: 1,
-      ColorCode: this.retroService.GetColorForCardRandom(),
-      CreatedBy: 1,
-      Editable: true,
-      Message: 'Testing by vijay sahu',
-      SprintId: 1,
-      Type: RetroType.wrong,
-      VoteDown: 0,
-      VoteUp: 0
-    });
-
-    this.RetroCommentsList.push({
-      RetroId: 2,
-      ColorCode: this.retroService.GetColorForCardRandom(),
-      CreatedBy: 1,
-      Editable: true,
-      Message: 'Testing by sad fasd fasdf asd fasd f sahu',
-      SprintId: 1,
-      Type: RetroType.well,
-      VoteDown: 0,
-      VoteUp: 0
-    });
-
-    this.RetroCommentsList.push({
-      RetroId: 3,
-      ColorCode: this.retroService.GetColorForCardRandom(),
-      CreatedBy: 1,
-      Editable: true,
-      Message: ';lm omkl mk mlkmlkm lkml kml mlkm lmlk  by sad fasd fasdf asd fasd f sahu',
-      SprintId: 1,
-      Type: RetroType.well,
-      VoteDown: 0,
-      VoteUp: 0
-    });
-
-    this.RetroCommentsList.push({
-      RetroId: 4,
-      ColorCode: this.retroService.GetColorForCardRandom(),
-      CreatedBy: 1,
-      Editable: true,
-      Message: 'd sd gwtoioyoy uou pi oi poi opip ipi poi poi poi by sad fasd fasdf asd fasd f sahu',
-      SprintId: 1,
-      Type: RetroType.well,
-      VoteDown: 0,
-      VoteUp: 0
-    });
-    this.RetroCommentsList.push({
-      RetroId: 5,
-      ColorCode: this.retroService.GetColorForCardRandom(),
-      CreatedBy: 1,
-      Editable: true,
-      Message: 'Testing by vijay af asdfads fadsf asd fasdf sadf saf af ',
-      SprintId: 1,
-      Type: RetroType.wrong,
-      VoteDown: 0,
-      VoteUp: 0
-    });
   }
 }
 

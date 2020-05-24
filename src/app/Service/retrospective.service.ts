@@ -1,6 +1,6 @@
 import { Injectable, OnInit } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { RetrospectiveDbModel, RetrospectiveModel, CardColors } from '../Modals/Retrospective.model';
+import { RetrospectiveDbModel, RetrospectiveModel, CardColors, RetroType } from '../Modals/Retrospective.model';
 import { HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { min, max } from 'rxjs/operators';
@@ -33,7 +33,7 @@ export class RetrospectiveService implements OnInit {
       })
     };
 
-    console.log(retroModel.Message);
+    console.log(retroModel.message);
     const urlis = this.url + 'Retrospective'; // this.addUrl;
     return this._httpClient.post<boolean>(urlis, retroModel, httpOptions); // .pipe(catchError(this.handleError));
   }
@@ -50,7 +50,78 @@ export class RetrospectiveService implements OnInit {
     paramObj.append('RetroId', retroModel.RetroId.toString());
     return this._httpClient.get('url', { params: paramObj });
   }
+  GetCommentList(): RetrospectiveModel[] {
+    // this.retroService.GetRetroCommentList(1).subscribe(res => {
+    //   console.log(res);
+    //   this.RetroCommentsList = res;
 
+    //   this.wentWell = res.filter(x => x.Type === RetroType.well);
+    //   this.wentWrong = res.filter(x => x.Type === RetroType.wrong);
+    //   this.actionTaken = res.filter(x => x.Type === RetroType.action);
+
+    // });
+    const RetroCommentsList: RetrospectiveModel[] = [];
+    RetroCommentsList.push({
+      retroId: 1,
+      colorCode: this.GetColorForCardRandom(),
+      createdBy: 1,
+      editable: true,
+      message: 'Testing by vijay sahu',
+      sprintId: 1,
+      type: RetroType.wrong,
+      voteDown: 0,
+      voteUp: 0
+    });
+
+    RetroCommentsList.push({
+      retroId: 2,
+      colorCode: this.GetColorForCardRandom(),
+      createdBy: 1,
+      editable: true,
+      message: 'Testing by sad fasd fasdf asd fasd f sahu',
+      sprintId: 1,
+      type: RetroType.well,
+      voteDown: 0,
+      voteUp: 0
+    });
+
+    RetroCommentsList.push({
+      retroId: 3,
+      colorCode: this.GetColorForCardRandom(),
+      createdBy: 1,
+      editable: true,
+      message: ';lm omkl mk mlkmlkm lkml kml mlkm lmlk  by sad fasd fasdf asd fasd f sahu',
+      sprintId: 1,
+      type: RetroType.well,
+      voteDown: 0,
+      voteUp: 0
+    });
+
+    RetroCommentsList.push({
+      retroId: 4,
+      colorCode: this.GetColorForCardRandom(),
+      createdBy: 1,
+      editable: true,
+      message: 'd sd gwtoioyoy uou pi oi poi opip ipi poi poi poi by sad fasd fasdf asd fasd f sahu',
+      sprintId: 1,
+      type: RetroType.well,
+      voteDown: 0,
+      voteUp: 0
+    });
+    RetroCommentsList.push({
+      retroId: 5,
+      colorCode: this.GetColorForCardRandom(),
+      createdBy: 1,
+      editable: true,
+      message: 'Testing by vijay af asdfads fadsf asd fasdf sadf saf af ',
+      sprintId: 1,
+      type: RetroType.wrong,
+      voteDown: 0,
+      voteUp: 0
+    });
+
+    return RetroCommentsList;
+  }
 
   handleError(e) {
     debugger;
