@@ -82,7 +82,10 @@ export class RetrospectiveComponent implements OnInit {
       if (msg.actionToTaken === 'd') {
         this.RetroCommentsList = this.RetroCommentsList.filter( x => x.retroCommentId !== msg.retroCommentId);
       } else if (this.RetroCommentsList.filter(item => item.retroCommentId === msg.retroCommentId)[0]) {
-        this.RetroCommentsList.filter(item => item.retroCommentId === msg.retroCommentId)[0].type = msg.type;
+        const rr = this.RetroCommentsList.filter(item => item.retroCommentId === msg.retroCommentId)[0]
+        rr.type = msg.type;
+        rr.voteUp = msg.voteUp;
+        rr.voteDown = msg.voteDown;
 
         this.RetroCommentsList = this.RetroCommentsList;
       } else {
@@ -217,6 +220,12 @@ export class RetrospectiveComponent implements OnInit {
   deleteRetroPoint(event, retroCommentId) {
     const tempComment = this.RetroCommentsList.filter(x => x.retroCommentId === retroCommentId)[0];
     tempComment.actionToTaken = 'd';
+    this.hubConnection.SendMessage(tempComment);
+  }
+  GivenOneLike(event, retroCommentId) {
+    console.log('updateRetroType called');
+    const tempComment = this.RetroCommentsList.filter(x => x.retroCommentId === retroCommentId)[0];
+    tempComment.voteUp = tempComment.voteUp + 1;
     this.hubConnection.SendMessage(tempComment);
   }
   notAllowDrop(ev) {

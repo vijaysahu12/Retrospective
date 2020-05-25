@@ -19,6 +19,9 @@
   /* background: linear-gradient(45deg, #2d89ec 0%, rgb(110, 181, 181) 100%); */
 }
 
+.headingText {
+  color: white;
+}
 
 .flex-containerColumn {
   display: flex;
@@ -72,7 +75,7 @@
 
 .retroPoint {
   display: flex;
-    flex-direction: column;
+  flex-direction: column;
   position: relative;
   margin: 6px 4px;
   text-align: left;
@@ -80,7 +83,9 @@
   cursor: grab;
   box-shadow:  0px 0px 10px 1px rgba(0, 0, 0, 0.3);
   min-height: 56px;
-  color: #14e7ff;
+  color: white;
+  border-radius: 0px 28px 0px 28px;
+  border: 1px solid white;
 }
 .retroPoint:active {
   cursor: grabbing;
@@ -101,18 +106,17 @@
 }
 
 .retroPoint > div:first-child {
+  padding: 6px 7px;    
+  word-break: break-word;
   padding: 6px 7px;
+    font-family: cursive;
+    word-spacing: 0.8px;
 }
 
 .retroPoint > div:last-child {
   height: 20px;
 }
-
-/* .vote {
-  position: absolute;
-  top: 0%;
-  left: 90%;
-} */
+ 
 
 .flex-containerColumn>span {
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
@@ -322,66 +326,7 @@ i {
   cursor: pointer;
   padding: 0px 0px;
 }
-
-.vote {
-  position: relative;
-  width: 14px;
-  height: 14px;
-  left: 99%;
-}
-
-.vote:before,
-.vote:after{
-      content: "";
-      position: absolute;
-      background-color: green;
-      transition: transform 0.25s ease-out;
-  }
-
-  /* Vertical line */
-.vote:before{
-      top: 0;
-      left: 50%;
-      width: 4px;
-      height: 100%;
-      margin-left: -2px;
-  }
-
-  /* horizontal line */
-.vote:after{
-      top: 50%;
-      left: 0;
-      width: 100%;
-      height: 4px;
-      margin-top: -2px;
-  }
-
-
-
-  .voteDown {
-    position: relative;
-    width: 14px;
-    height: 14px;
-    left: 99%;
-    margin-top: 5px;
-  }
-  
-  .voteDown:before,
-  .voteDown:after{
-        content: "";
-        position: absolute;
-        background-color: red;
-        transition: transform 0.25s ease-out;
-    }
-  
-  /* horizontal line */
-  .voteDown:after{
-    top: 50%;
-    left: 0;
-    width: 100%;
-    height: 4px;
-    margin-top: 2px;
-  }
+ 
   #div1, #div2 {
     float: left;
     width: 100px;
@@ -390,13 +335,15 @@ i {
     padding: 10px;
     border: 1px solid black;
   }
-
- 
   .addUpdateIcon {
     width: 27px;
     height: 14px;
     float: right;
     cursor: pointer;
+   }
+
+   .vote {
+     margin-top: -2px;
    }
 
   .plusIcon {

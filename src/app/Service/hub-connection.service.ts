@@ -64,22 +64,55 @@ export class HubConnectionService {
 
 
 
-// --exec uspRetroAdd 1 , '22 Test from stored proecedure', 1, '#red' , 1, 1, 0 
-// ALTER PROCEDURE uspRetroAdd 
+// GO
+// /****** Object:  StoredProcedure [dbo].[uspRetroAddorUPpdate]    Script Date: 25-05-2020 20:23:06 ******/
+// SET ANSI_NULLS ON
+// GO
+// SET QUOTED_IDENTIFIER ON
+// GO
+// --select * From RetroCOmments
+// -----------------------------------------------------------------
+// --exec [uspRetroAddorUPpdate] 1 , '22 Test from stored proecedure', 1, '#red' , 1, 1, 0 
+// ALTER PROCEDURE [dbo].[uspRetroAddorUPpdate] 
+// 	@RetroCommentId int,
 // 	@SprintId INT,
 // 	@Message NVARCHAR(500),
 // 	@CreatedBy INT,
 // 	@ColorCode NVARCHAR(15),
 // 	@Type INT,
 // 	@VoteDown INT ,
-// 	@VoteUp INT
+// 	@VoteUp INT,
+// 	@actionToTaken varchar(10)
 
 // AS 
 // BEGIN
-// 	--SELECT * FROM RetroComments
-// 	INSERT INTO RetroComments values (@Message, @SprintId , 1,@CreatedBy ,@ColorCode ,@Type , @VoteDown  , @VoteUp  )
+
+// 	IF(isnull(@actionToTaken,'') = 'd')
+// 	BEGIN 
+// 		DELETE FROM RetroComments where SprintID = @SprintId AND RetroCommentId = @RetroCommentId
+// 	END
+
+// 	ELSE BEGIN
+// 		IF EXISTS ( SELECT top 1 1 FROM RetroComments WHERE RetroCommentId = @RetroCommentId AND SprintId = @SprintId) 
+// 		BEGIN
+// 			UPDATE RetroComments 
+// 			set 
+// 				Message = @Message,
+// 				ColorCode = @ColorCode,
+// 				VoteUp = @VoteUp,
+// 				VoteDown = @VoteDown,
+// 				[Type] = @Type
+// 			WHERE SprintId = @SprintId
+// 			AND RetroCommentId = @RetroCommentId
+// 		END
+// 		ELSE BEGIN
+// 			INSERT INTO RetroComments values (@Message, @SprintId , 1,@CreatedBy ,@ColorCode ,@Type , @VoteDown  , @VoteUp  )
+// 		end
+// 	end
 // 	SELECT 1 as Result
 // END
+
+
 
 
 // CREATE TABLE RetroSprint(

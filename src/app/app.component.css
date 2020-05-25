@@ -1,0 +1,9 @@
+body {
+    background: linear-gradient(0deg, #af9191, #4a0b0b00) no-repeat;
+    height: 800%;
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    align-items: center;
+    vertical-align: middle;
+}
