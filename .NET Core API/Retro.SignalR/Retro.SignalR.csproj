@@ -5,7 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.3" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Retro.Data\Retro.Data.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Modals\" />
   </ItemGroup>
 
 

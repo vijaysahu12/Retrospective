@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{52C4A1E5-78AA-4475-9F8B-742427E42811}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Retro.API", "Retro.API\Retro.API.csproj", "{967403FC-B25F-4F31-A1EE-A5036EBB176F}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Retro.Data", "Retro.Data\Retro.Data.csproj", "{60BE7403-6F9E-46F3-9BFF-82A2519EF01E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Retro.SignalR", "Retro.SignalR\Retro.SignalR.csproj", "{AD197BA7-D472-4FD5-AB05-958005E89B34}"
@@ -17,10 +15,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{967403FC-B25F-4F31-A1EE-A5036EBB176F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{967403FC-B25F-4F31-A1EE-A5036EBB176F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{967403FC-B25F-4F31-A1EE-A5036EBB176F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{967403FC-B25F-4F31-A1EE-A5036EBB176F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{60BE7403-6F9E-46F3-9BFF-82A2519EF01E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{60BE7403-6F9E-46F3-9BFF-82A2519EF01E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{60BE7403-6F9E-46F3-9BFF-82A2519EF01E}.Release|Any CPU.ActiveCfg = Release|Any CPU

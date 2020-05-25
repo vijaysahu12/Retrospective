@@ -1,45 +1,76 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using PetroConnect.Data.Common;
 using PetroConnect.Data.Context;
 using Retro.SignalR.Hubs;
+using Retro.SignalR.Modals;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 namespace Retrospective
 {
-    public interface IRetroService
+  public interface IRetroService
+  {
+    int RetroAddOrUpdateOrDelete(RetroModel retro);
+    List<RetroModel> RetroGet(int sprintId);
+  }
+  public class RetroService : IRetroService
+  {
+    private readonly PetroConnectContext _connectContext;
+    public RetroService(PetroConnectContext connectContext)
     {
-        int RetroAdd(RetroModel retro);
+      _connectContext = connectContext;
     }
-    public class RetroService : IRetroService
+    public int RetroAddOrUpdateOrDelete(RetroModel retro)
     {
-        private readonly PetroConnectContext _connectContext;
-        public RetroService(PetroConnectContext connectContext)
-        {
-            _connectContext = connectContext;
-        }
-        public int RetroAdd(RetroModel retro)
-        {
-            try
-            {
-                var result = _connectContext.uspRetroAdd.FromSqlRaw("exec uspRetroAdd {0} , {1} , {2} , {3} , {4}, {5}, {6}",
-                    retro.SprintId, 
-                    retro.Message,
-                    retro.CreatedBy,
-                    retro.ColorCode,
-                    retro.Type,
-                    retro.VoteDown,
-                    retro.VoteUp
-                    ).ToList();
-                return result.FirstOrDefault().Result;
-            }
-            catch (Exception ex)
-            {
-                return 0;            
-            }
-        }
+      try
+      {
+        var result = _connectContext.uspRetroAddorUPpdate.FromSqlRaw("exec uspRetroAddorUPpdate {0} , {1} , {2} , {3} , {4}, {5}, {6} , {7} , {8}",
+            retro.RetroCommentId,
+            retro.SprintId,
+            retro.Message,
+            retro.CreatedBy,
+            retro.ColorCode,
+            retro.Type,
+            retro.VoteDown,
+            retro.VoteUp,
+            retro.actionToTaken
+            ).ToList();
+        return result.FirstOrDefault().Result;
+      }
+      catch (Exception ex)
+      {
+        return 0;
+      }
     }
+
+    public List<RetroModel> RetroGet(int sprintId)
+    {
+      try
+      {
+        var result = _connectContext.uspRetroGet
+          .FromSqlRaw("exec uspRetroGet {0} ", sprintId)
+          .ToList().AsEnumerable();
+        return result.Select(x => new RetroModel
+        {
+          RetroCommentId = x.RetroCommentId,
+          SprintId = sprintId,
+          Message = x.Message,
+          ColorCode = x.ColorCode,
+          CreatedBy = x.CreatedBy,
+          Editable = x.Editable,
+          Type = x.Type,
+          VoteDown = x.VoteDown,
+          VoteUp = x.VoteUp
+        }).ToList();
+      }
+      catch (Exception ex)
+      {
+        return new List<RetroModel>();
+      }
+    }
+
+  }
 }

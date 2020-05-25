@@ -69,23 +69,18 @@
   cursor: pointer;
 }
 
-.plusIcon {
- width: 26px;
- height: 26px;
- margin-top: -4px;
- float: right;
- cursor: pointer;
- /* background: url('../../../assets/icons/plus.png') no-repeat center center fixed;; */
-}
+
 .retroPoint {
+  display: flex;
+    flex-direction: column;
   position: relative;
-  padding: 18px 4px;
-  margin: 2px 2px;
+  margin: 6px 4px;
   text-align: left;
   border-radius: 4px;
   cursor: grab;
- box-shadow:  0px 0px 10px 1px rgba(0, 0, 0, 0.3);
- margin: 6px 4px;
+  box-shadow:  0px 0px 10px 1px rgba(0, 0, 0, 0.3);
+  min-height: 56px;
+  color: #14e7ff;
 }
 .retroPoint:active {
   cursor: grabbing;
@@ -97,6 +92,20 @@
 
 .retroPoint::after {
   width: 100px;
+}
+
+.retroPoint::first-letter {
+  font-weight: bold;
+  text-transform: uppercase;
+  /* color: red; */
+}
+
+.retroPoint > div:first-child {
+  padding: 6px 7px;
+}
+
+.retroPoint > div:last-child {
+  height: 20px;
 }
 
 /* .vote {
@@ -381,3 +390,20 @@ i {
     padding: 10px;
     border: 1px solid black;
   }
+
+ 
+  .addUpdateIcon {
+    width: 27px;
+    height: 14px;
+    float: right;
+    cursor: pointer;
+   }
+
+  .plusIcon {
+ width: 26px;
+ height: 26px;
+ margin-top: -4px;
+ float: right;
+ cursor: pointer;
+ /* background: url('../../../assets/icons/plus.png') no-repeat center center fixed;; */
+}

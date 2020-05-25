@@ -1,11 +1,11 @@
-using Microsoft.VisualBasic;
-using Retro.SignalR.Modals;
 using System;
-using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace PetroConnect.Data.Context
+namespace Retro.SignalR.Modals
 {
-  public class uspRetroGet_Result
+  public class RetroModel
   {
     public int RetroCommentId { get; set; }
     public int SprintId { get; set; }
@@ -16,10 +16,13 @@ namespace PetroConnect.Data.Context
     public RetroType Type { get; set; }
     public string ColorCode { get; set; }
     public int CreatedBy { get; set; }
+    public string actionToTaken { get; set; }
   }
 
-  public class uspRetroAdd_Result
+  public enum RetroType
   {
-    public int Result { get; set; }
+    well,
+    wrong,
+    action
   }
 }

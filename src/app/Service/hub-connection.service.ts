@@ -50,13 +50,9 @@ export class HubConnectionService {
 
   SendMessage(msg: RetrospectiveModel): void {
     console.log('sendMessage() Called.');
-    const data = {
-      Message: msg.message,
-      Type: msg.type,
-      ColorCode: msg.colorCode
-    };
+   
     this.connection
-      .invoke(this.hubMethodName, 'vj', data).finally()
+      .invoke(this.hubMethodName, 'vj', msg).finally()
       .catch(err => console.log(err));
   }
   AddComment(retroModel: RetrospectiveModel) {
@@ -108,3 +104,12 @@ export class HubConnectionService {
 // 	FOREIGN KEY (SprintId) REFERENCES RetroSprint(SprintId) 
 // )
 
+
+
+// -- exec uspRetroGet 1
+// CREATE PROCEDURE uspRetroGet
+// @SprintId int
+// AS
+// BEGIN
+// 	select * From RetroCOmments where Sprintid = @SprintId
+// END

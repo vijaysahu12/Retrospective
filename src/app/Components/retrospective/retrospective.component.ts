@@ -10,47 +10,51 @@ import { HubConnectionService } from 'src/app/Service/hub-connection.service';
   styleUrls: ['./retrospective.component.css'],
   animations: [
     trigger('shrinkOut', [
-      state('in', style({ height: '*' })),
+      transition('* => *', [ // each time the binding value changes
+        query(':leave', [
+          stagger(600, [
+            animate('1.5s', style({ opacity: 0 }))
+          ])
+        ], { optional: true }),
+        query(':enter', [
+          style({ opacity: 0 }),
+          stagger(600, [
+            animate('1.5s', style({ opacity: 1 }))
+          ])
+        ], { optional: true })
+      ])
+    ]),
+    trigger('filterAnimation', [
+      state('in', style({})),
       transition('* => void', [
-        style({ height: '*' }),
-        animate(250, style({ height: 0 }))
-      ])
-    ]),
-    trigger('fadeInOut', [
-      state('void', style({
-        opacity: 0
-      })),
-      transition('void <=> *', animate(800)),
-    ]),
-    trigger('EnterLeave', [
-      state('flyIn', style({ transform: 'translateX(0)' })),
-      transition(':enter', [
-        style({ transform: 'translateX(-100%)' }),
-        animate('0.5s 300ms ease-in')
+        style({ height: '!', opacity: 1 }),
+        animate(200, style({ height: 0, opacity: 0 }))
       ]),
-      transition(':leave', [
-        animate('0.3s ease-out', style({ transform: 'translateX(100%)' }))
+      transition('void => *', [
+        style({ height: 0, opacity: 0 }),
+        animate(400, style({ height: '*', opacity: 1 }))
       ])
     ]),
-    trigger('items', [
-      transition(':enter', [
-        style({ transform: 'scale(0.5)', opacity: 0 }),  // initial
-        animate('1s cubic-bezier(.8, -0.6, 0.2, 1.5)',
-          style({ transform: 'scale(1)', opacity: 1 }))  // final
-      ])
-    ]),
-    trigger('listAnimation', [
-      transition('* => *', [
-        query(':enter', style({ opacity: 0 }), { optional: true }),
 
-        query(':enter', stagger('300ms', [
-          animate('1s ease-in', keyframes([
-            style({ opacity: 0, transform: 'translateY(-75%)', offset: 0 }),
-            style({ opacity: .5, transform: 'translateY(35px)', offset: 0.3 }),
-            style({ opacity: 1, transform: 'translateY(0)', offset: 1.0 }),
-          ]))]), { optional: true })
-      ])
+    trigger('listAnimation', [
+      transition(':enter, * => 0, * => -1', []),
+      transition(':increment', [
+        query(':enter', [
+          style({ opacity: 0, width: '0px' }),
+          stagger(50, [
+            animate('300ms ease-out', style({ opacity: 1, width: '*' })),
+          ]),
+        ], { optional: true })
+      ]),
+      transition(':decrement', [
+        query(':leave', [
+          stagger(50, [
+            animate('300ms ease-out', style({ opacity: 0, width: '0px' })),
+          ]),
+        ], { optional: true })
+      ]),
     ])
+
   ]
 })
 export class RetrospectiveComponent implements OnInit {
@@ -63,24 +67,27 @@ export class RetrospectiveComponent implements OnInit {
   RetroCommentsList: RetrospectiveModel[] = [];
   retroRquestModel: RetrospectiveDbModel;
 
-  constructor(private retroService: RetrospectiveService , private hubConnection: HubConnectionService) { }
+  constructor(private retroService: RetrospectiveService, private hubConnection: HubConnectionService) { }
 
   ngOnInit() {
     // this.sendMessage();
-    this.RetroCommentsList = this.retroService.GetCommentList();
+    this.retroService.GetRetroCommentList(1).subscribe(x => {
+      console.log('Got Comments from APi');
+      this.RetroCommentsList = x;
+    });
+
     this.hubConnection.dataReceived.subscribe(msg => {
-      const ll = {
-        retroId: msg.retroId,
-        message: msg.message,
-        sprintId: msg.sprintId,
-        createdBy: msg.createdBy,
-        editable: msg.editable,
-        colorCode: msg.colorCode,
-        type: msg.type,
-        voteDown: 0,
-        voteUp: 0
-      };
-      this.RetroCommentsList = this.RetroCommentsList.concat(ll);
+      console.log('Got Comments from HUB');
+
+      if (msg.actionToTaken === 'd') {
+        this.RetroCommentsList = this.RetroCommentsList.filter( x => x.retroCommentId !== msg.retroCommentId);
+      } else if (this.RetroCommentsList.filter(item => item.retroCommentId === msg.retroCommentId)[0]) {
+        this.RetroCommentsList.filter(item => item.retroCommentId === msg.retroCommentId)[0].type = msg.type;
+
+        this.RetroCommentsList = this.RetroCommentsList;
+      } else {
+        this.RetroCommentsList = this.RetroCommentsList.concat(msg);
+      }
     });
   }
 
@@ -99,10 +106,10 @@ export class RetrospectiveComponent implements OnInit {
     }
   }
 
-  onTextEnter(event , retType: RetroType) {
+  onTextEnter(event, retType: RetroType) {
     if (event !== undefined && event != null && event !== '' && event.toString().trim().length > 1) {
       const dd: RetrospectiveModel = {
-        retroId: 0,
+        retroCommentId: 0,
         message: event,
         sprintId: 1,
         createdBy: 1,
@@ -110,6 +117,7 @@ export class RetrospectiveComponent implements OnInit {
         type: retType,
         voteDown: 0,
         voteUp: 0,
+        actionToTaken : '',
         colorCode: this.retroService.GetColorForCardRandom()
       };
       this.hubConnection.SendMessage(dd);
@@ -136,7 +144,7 @@ export class RetrospectiveComponent implements OnInit {
   }
 
   onRetroItemClick(item: number) {
-    const dd = this.RetroCommentsList.filter(x => x.retroId === item)[0];
+    const dd = this.RetroCommentsList.filter(x => x.retroCommentId === item)[0];
     if (dd.type === RetroType.well) {
 
     } else if (dd.type === RetroType.wrong) {
@@ -145,7 +153,7 @@ export class RetrospectiveComponent implements OnInit {
 
   ConvertDivToText(event: any, RetroId: number) {
 
-    const retroObj = this.RetroCommentsList.filter(x => x.retroId === RetroId)[0];
+    const retroObj = this.RetroCommentsList.filter(x => x.retroCommentId === RetroId)[0];
     const textBox = document.createElement('textarea');
     textBox.setAttribute('id', 'attribute');
     textBox.setAttribute('class', 'textEditor');
@@ -185,17 +193,31 @@ export class RetrospectiveComponent implements OnInit {
     ev.preventDefault();
   }
 
-  drag(ev) {
+  drag(ev, commentId) {
     console.log('drag');
-
-    ev.dataTransfer.setData('text', ev.target.id);
+    ev.dataTransfer.setData('commentId', ev.target.id);
+    ev.dataTransfer.setData('commentMessage', ev.target.innerHTML);
   }
 
-  drop(ev) {
+  drop(ev, retroType: RetroType) {
     console.log('drop');
     ev.preventDefault();
-    const data = ev.dataTransfer.getData('text');
+    const data = ev.dataTransfer.getData('commentId');
     ev.target.appendChild(document.getElementById(data));
+    this.updateRetroType(parseInt(data, 0), retroType);
+  }
+
+  updateRetroType(retroCommentId: number, retroType: RetroType) {
+    console.log('updateRetroType called');
+    const tempComment = this.RetroCommentsList.filter(x => x.retroCommentId === retroCommentId)[0];
+    tempComment.type = retroType;
+    this.hubConnection.SendMessage(tempComment);
+  }
+
+  deleteRetroPoint(event, retroCommentId) {
+    const tempComment = this.RetroCommentsList.filter(x => x.retroCommentId === retroCommentId)[0];
+    tempComment.actionToTaken = 'd';
+    this.hubConnection.SendMessage(tempComment);
   }
   notAllowDrop(ev) {
     ev.preventDefault();

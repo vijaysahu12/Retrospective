@@ -10,8 +10,8 @@ import { min, max } from 'rxjs/operators';
 export class RetrospectiveService implements OnInit {
 
   constructor(private _httpClient: HttpClient) { }
-  url = 'http://localhost:63023/api/';
-  addUrl: 'Retrospective';
+  url = 'http://localhost:56466/api/';
+  addUrl: 'Retro';
 
   ngOnInit() { }
 
@@ -22,7 +22,8 @@ export class RetrospectiveService implements OnInit {
   }
 
   GetRetroCommentList(sprintId: number): Observable<RetrospectiveModel[]> {
-    return this._httpClient.get<RetrospectiveModel[]>(this.url + 'Retrospective', { params: new HttpParams().set('id', sprintId.toString()) });
+    return this._httpClient.get<RetrospectiveModel[]>(this.url + 'Retro',
+    { params: new HttpParams().set('sprintId', sprintId.toString()) });
   }
 
   AddRetroComment(retroModel: RetrospectiveModel): Observable<boolean> {
@@ -50,79 +51,7 @@ export class RetrospectiveService implements OnInit {
     paramObj.append('RetroId', retroModel.RetroId.toString());
     return this._httpClient.get('url', { params: paramObj });
   }
-  GetCommentList(): RetrospectiveModel[] {
-    // this.retroService.GetRetroCommentList(1).subscribe(res => {
-    //   console.log(res);
-    //   this.RetroCommentsList = res;
-
-    //   this.wentWell = res.filter(x => x.Type === RetroType.well);
-    //   this.wentWrong = res.filter(x => x.Type === RetroType.wrong);
-    //   this.actionTaken = res.filter(x => x.Type === RetroType.action);
-
-    // });
-    const RetroCommentsList: RetrospectiveModel[] = [];
-    RetroCommentsList.push({
-      retroId: 1,
-      colorCode: this.GetColorForCardRandom(),
-      createdBy: 1,
-      editable: true,
-      message: 'Testing by vijay sahu',
-      sprintId: 1,
-      type: RetroType.wrong,
-      voteDown: 0,
-      voteUp: 0
-    });
-
-    RetroCommentsList.push({
-      retroId: 2,
-      colorCode: this.GetColorForCardRandom(),
-      createdBy: 1,
-      editable: true,
-      message: 'Testing by sad fasd fasdf asd fasd f sahu',
-      sprintId: 1,
-      type: RetroType.well,
-      voteDown: 0,
-      voteUp: 0
-    });
-
-    RetroCommentsList.push({
-      retroId: 3,
-      colorCode: this.GetColorForCardRandom(),
-      createdBy: 1,
-      editable: true,
-      message: ';lm omkl mk mlkmlkm lkml kml mlkm lmlk  by sad fasd fasdf asd fasd f sahu',
-      sprintId: 1,
-      type: RetroType.well,
-      voteDown: 0,
-      voteUp: 0
-    });
-
-    RetroCommentsList.push({
-      retroId: 4,
-      colorCode: this.GetColorForCardRandom(),
-      createdBy: 1,
-      editable: true,
-      message: 'd sd gwtoioyoy uou pi oi poi opip ipi poi poi poi by sad fasd fasdf asd fasd f sahu',
-      sprintId: 1,
-      type: RetroType.well,
-      voteDown: 0,
-      voteUp: 0
-    });
-    RetroCommentsList.push({
-      retroId: 5,
-      colorCode: this.GetColorForCardRandom(),
-      createdBy: 1,
-      editable: true,
-      message: 'Testing by vijay af asdfads fadsf asd fasdf sadf saf af ',
-      sprintId: 1,
-      type: RetroType.wrong,
-      voteDown: 0,
-      voteUp: 0
-    });
-
-    return RetroCommentsList;
-  }
-
+   
   handleError(e) {
     debugger;
   }
@@ -154,7 +83,7 @@ export class RetrospectiveService implements OnInit {
     const colors = ['#faf3dd', '#f4acb7', '#74c69d', '#979dac', '#00bbf9',
       '#63b7af', '#f9c74f', '#fe938c', '#16697a', '#ed6a5a', '#706677', '#9d4edd',
       '#ff5d8f', '#1b998b', '#233d4d', '#f4f482'];
-    return '#ffff94';
+    return '#2d313d';
     // return colors[Math.floor(Math.random() * (16 - 0)) + 0];
   }
 }

@@ -1,5 +1,5 @@
 export class RetrospectiveModel {
-    retroId: number;
+    retroCommentId: number;
     message: string;
     sprintId: number;
     type: RetroType;
@@ -8,6 +8,7 @@ export class RetrospectiveModel {
     editable: boolean;
     createdBy: number;
     colorCode: string;
+    actionToTaken: string;
 }
 
 export enum RetroType {

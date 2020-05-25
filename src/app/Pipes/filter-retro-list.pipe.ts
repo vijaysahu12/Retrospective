@@ -7,7 +7,7 @@ import { RetroType, RetrospectiveModel } from '../Modals/Retrospective.model';
 export class FilterRetroListPipe implements PipeTransform {
 
   transform(retroList: RetrospectiveModel[], typeRetro: RetroType): any {
-    console.log('pipe called');
+    console.log('pipe called for: ' + typeRetro);
     return retroList.filter(x => x.type === typeRetro);
   }
 }
