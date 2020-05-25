@@ -34,14 +34,14 @@
           </div>
         </div>
         <div [@listAnimation]="RetroCommentsList ? RetroCommentsList.length : 0">
-          <div (click)="onRetroItemClick(item.commentId)" draggable="true" [id]=" item.commentId"
-            (dragstart)="drag($event,item.commentId)" [style.background-color]='item.colorCode'
+          <div (click)="onRetroItemClick(item.token)" draggable="true" [id]=" item.token"
+            (dragstart)="drag($event,item.token)" [style.background-color]='item.colorCode'
             class="retroPoint well" *ngFor='let item of (RetroCommentsList | filterRetroList : this.retroType.well)'>
             <div>{{item.message}}</div>
             <div>
 
               <div class="addUpdateIcon vote">{{item.voteUp}}</div>
-              <svg name='like' (click)="GivenOneLike($event,item.commentId)" aria-hidden="true" focusable="false"
+              <svg name='like' (click)="GivenOneLike($event,item.token)" aria-hidden="true" focusable="false"
                 data-prefix="fas" data-icon="thumbs-up" class="addUpdateIcon" role="img"
                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                 <path fill="currentColor"
@@ -49,7 +49,7 @@
                 </path>
               </svg>
 
-              <svg name='updateText' (click)="ConvertDivToText($event,item.commentId)" class="addUpdateIcon"
+              <svg name='updateText' (click)="ConvertDivToText($event,item.token)" class="addUpdateIcon"
                 aria-hidden="true" focusable="false" data-prefix="fas" data-icon="edit" role="img"
                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
                 <path fill="currentColor"
@@ -57,7 +57,7 @@
                 </path>
               </svg>
 
-              <svg (click)="deleteRetroPoint($event,item.commentId)" aria-hidden="true" focusable="false"
+              <svg (click)="deleteRetroPoint($event,item.token)" aria-hidden="true" focusable="false"
                 data-prefix="fas" data-icon="trash" class="addUpdateIcon" role="img" xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 448 512">
                 <path fill="currentColor"
@@ -93,13 +93,13 @@
         </div>
         <div [@listAnimation]="RetroCommentsList ? RetroCommentsList.length : 0">
           <div draggable="true" dragClass="drag-over" dragOverClass="drag-target-border"
-            (dragstart)="drag($event,item.commentId)" [id]="item.commentId"
+            (dragstart)="drag($event,item.token)" [id]="item.token"
             [style.background-color]='item.colorCode' class="retroPoint wrong"
             *ngFor='let item of RetroCommentsList | filterRetroList : this.retroType.wrong'>
             <div>{{item.message}}</div>
             <div>
               <div class="addUpdateIcon vote">{{item.voteUp}}</div>
-              <svg name='like' (click)="GivenOneLike($event,item.commentId)" aria-hidden="true" focusable="false"
+              <svg name='like' (click)="GivenOneLike($event,item.token)" aria-hidden="true" focusable="false"
                 data-prefix="fas" data-icon="thumbs-up" class="addUpdateIcon" role="img"
                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                 <path fill="currentColor"
@@ -107,7 +107,7 @@
                 </path>
               </svg>
 
-              <svg name='updateText' (click)="ConvertDivToText($event,item.commentId)" class="addUpdateIcon"
+              <svg name='updateText' (click)="ConvertDivToText($event,item.token)" class="addUpdateIcon"
                 aria-hidden="true" focusable="false" data-prefix="fas" data-icon="edit" role="img"
                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
                 <path fill="currentColor"
@@ -115,7 +115,7 @@
                 </path>
               </svg>
 
-              <svg (click)="deleteRetroPoint($event,item.commentId)" aria-hidden="true" focusable="false"
+              <svg (click)="deleteRetroPoint($event,item.token)" aria-hidden="true" focusable="false"
                 data-prefix="fas" data-icon="trash" class="addUpdateIcon" role="img" xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 448 512">
                 <path fill="currentColor"
@@ -142,7 +142,7 @@
             <div>{{item.message}}</div>
             <div>
               <div name='voteUp' class="addUpdateIcon vote">{{item.voteUp}}</div>
-              <svg name='like' (click)="GivenOneLike($event,item.commentId)" aria-hidden="true" focusable="false"
+              <svg name='like' (click)="GivenOneLike($event,item.token)" aria-hidden="true" focusable="false"
                 data-prefix="fas" data-icon="thumbs-up" class="addUpdateIcon" role="img"
                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                 <path fill="currentColor"
@@ -150,7 +150,7 @@
                 </path>
               </svg>
 
-              <svg name='updateText' (click)="ConvertDivToText($event,item.commentId)" class="addUpdateIcon"
+              <svg name='updateText' (click)="ConvertDivToText($event,item.token)" class="addUpdateIcon"
                 aria-hidden="true" focusable="false" data-prefix="fas" data-icon="edit" role="img"
                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
                 <path fill="currentColor"
@@ -158,7 +158,7 @@
                 </path>
               </svg>
 
-              <svg (click)="deleteRetroPoint($event,item.commentId)" aria-hidden="true" focusable="false"
+              <svg (click)="deleteRetroPoint($event,item.token)" aria-hidden="true" focusable="false"
                 data-prefix="fas" data-icon="trash" class="addUpdateIcon" role="img" xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 448 512">
                 <path fill="currentColor"

@@ -123,11 +123,6 @@ export class HubConnectionService {
 
 
 
-
-
-
-
-
 // CREATE TABLE RetroSprint(
 // 	SprintId INT PRIMARY KEY IDENTITY(1,1),
 // 	Description varchar(100),
@@ -166,11 +161,6 @@ export class HubConnectionService {
 
 // ALTER TABLE [dbo].[RetroComments] CHECK CONSTRAINT [FK__RetroComm__Sprin__1F63A897]
 // GO
-
-
-
-
-
 
 // -- exec uspRetroGet 1
 // CREATE PROCEDURE uspRetroGet

@@ -137,17 +137,17 @@ export class RetrospectiveComponent implements OnInit {
 
 
 
-  onRetroItemClick(item: number) {
-    const dd = this.RetroCommentsList.filter(x => x.commentId === item)[0];
+  onRetroItemClick(item: string) {
+    const dd = this.RetroCommentsList.filter(x => x.token === item)[0];
     if (dd.type === RetroType.well) {
 
     } else if (dd.type === RetroType.wrong) {
     }
   }
 
-  ConvertDivToText(event: any, RetroId: number) {
+  ConvertDivToText(event: any, token: string) {
 
-    const retroObj = this.RetroCommentsList.filter(x => x.commentId === RetroId)[0];
+    const retroObj = this.RetroCommentsList.filter(x => x.token === token)[0];
     const textBox = document.createElement('textarea');
     textBox.setAttribute('id', 'attribute');
     textBox.setAttribute('data_token', retroObj.token);
@@ -186,35 +186,35 @@ export class RetrospectiveComponent implements OnInit {
     ev.preventDefault();
   }
 
-  drag(ev, commentId) {
+  drag(ev, token) {
     console.log('drag');
-    ev.dataTransfer.setData('commentId', ev.target.id);
+    ev.dataTransfer.setData('token', ev.target.id);
     ev.dataTransfer.setData('commentMessage', ev.target.innerHTML);
   }
 
   drop(ev, retroType: RetroType) {
     console.log('drop');
     ev.preventDefault();
-    const data = ev.dataTransfer.getData('commentId');
+    const data = ev.dataTransfer.getData('token');
     ev.target.appendChild(document.getElementById(data));
-    this.updateRetroType(parseInt(data, 0), retroType);
+    this.updateRetroType(data , retroType);
   }
 
-  updateRetroType(commentId: number, retroType: RetroType) {
+  updateRetroType(token: string, retroType: RetroType) {
     console.log('updateRetroType called');
-    const tempComment = this.RetroCommentsList.filter(x => x.commentId === commentId)[0];
+    const tempComment = this.RetroCommentsList.filter(x => x.token === token)[0];
     tempComment.type = retroType;
     this.hubConnection.SendMessage(tempComment);
   }
 
-  deleteRetroPoint(event, commentId) {
-    const tempComment = this.RetroCommentsList.filter(x => x.commentId === commentId)[0];
+  deleteRetroPoint(event, token) {
+    const tempComment = this.RetroCommentsList.filter(x => x.token === token)[0];
     tempComment.action = 'd';
     this.hubConnection.SendMessage(tempComment);
   }
-  GivenOneLike(event, commentId) {
+  GivenOneLike(event, token) {
     console.log('updateRetroType called');
-    const tempComment = this.RetroCommentsList.filter(x => x.commentId === commentId)[0];
+    const tempComment = this.RetroCommentsList.filter(x => x.token === token)[0];
     tempComment.voteUp = tempComment.voteUp + 1;
     this.hubConnection.SendMessage(tempComment);
   }
