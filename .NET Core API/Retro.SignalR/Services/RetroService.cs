@@ -27,16 +27,18 @@ namespace Retrospective
     {
       try
       {
-        var result = _connectContext.uspRetroAddorUPpdate.FromSqlRaw("exec uspRetroAddorUPpdate {0} , {1} , {2} , {3} , {4}, {5}, {6} , {7} , {8}",
-            retro.RetroCommentId,
+        var result = _connectContext.uspRetroAddorUPpdate.FromSqlRaw("exec uspRetroAddorUPpdate {0} , {1} , {2} , {3} , {4}, {5}, {6} , {7} , {8} , {9}",
+            retro.CommentId,
+            
             retro.SprintId,
+            retro.token,
             retro.Message,
             retro.CreatedBy,
             retro.ColorCode,
             retro.Type,
             retro.VoteDown,
             retro.VoteUp,
-            retro.actionToTaken
+            retro.action
             ).ToList();
         return result.FirstOrDefault().Result;
       }
@@ -55,7 +57,8 @@ namespace Retrospective
           .ToList().AsEnumerable();
         return result.Select(x => new RetroModel
         {
-          RetroCommentId = x.RetroCommentId,
+          CommentId = x.CommentId,
+          token = x.token,
           SprintId = sprintId,
           Message = x.Message,
           ColorCode = x.ColorCode,

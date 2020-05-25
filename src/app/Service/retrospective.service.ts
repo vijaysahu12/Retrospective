@@ -1,6 +1,6 @@
 import { Injectable, OnInit } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { RetrospectiveDbModel, RetrospectiveModel, CardColors, RetroType } from '../Modals/Retrospective.model';
+import { RetrospectiveModel, CardColors, RetroType } from '../Modals/Retrospective.model';
 import { HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { min, max } from 'rxjs/operators';
@@ -15,11 +15,7 @@ export class RetrospectiveService implements OnInit {
 
   ngOnInit() { }
 
-  GetRetroComment(retroModel: RetrospectiveDbModel) {
-    let paramObj: HttpParams;
-    paramObj.append('RetroId', retroModel.RetroId.toString());
-    return this._httpClient.get('url', { params: paramObj });
-  }
+ 
 
   GetRetroCommentList(sprintId: number): Observable<RetrospectiveModel[]> {
     return this._httpClient.get<RetrospectiveModel[]>(this.url + 'Retro',
@@ -39,22 +35,6 @@ export class RetrospectiveService implements OnInit {
     return this._httpClient.post<boolean>(urlis, retroModel, httpOptions); // .pipe(catchError(this.handleError));
   }
 
-  UpdateRetroComment(retroModel: RetrospectiveDbModel) {
-    let paramObj: HttpParams;
-    paramObj.append('RetroId', retroModel.RetroId.toString());
-    paramObj.append('Message', retroModel.Message.toString());
-    return this._httpClient.get('url', { params: paramObj });
-  }
-
-  DeleteRetroComment(retroModel: RetrospectiveDbModel) {
-    let paramObj: HttpParams;
-    paramObj.append('RetroId', retroModel.RetroId.toString());
-    return this._httpClient.get('url', { params: paramObj });
-  }
-   
-  handleError(e) {
-    debugger;
-  }
 
 
   GetRandomColor() {
@@ -84,7 +64,7 @@ export class RetrospectiveService implements OnInit {
       '#63b7af', '#f9c74f', '#fe938c', '#16697a', '#ed6a5a', '#706677', '#9d4edd',
       '#ff5d8f', '#1b998b', '#233d4d', '#f4f482'];
     return '#2d313d';
-    // return colors[Math.floor(Math.random() * (16 - 0)) + 0];
+    // return colors[Math.floor(Math.random() * (999 - 0)) + 0];
   }
 }
 

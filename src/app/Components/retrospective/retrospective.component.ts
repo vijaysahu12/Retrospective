@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { trigger, state, style, transition, animate, query, stagger, keyframes } from '@angular/animations';
 import { RetrospectiveService } from '../../Service/retrospective.service';
-import { RetroType, RetrospectiveModel, RetrospectiveDbModel } from '../../Modals/Retrospective.model';
+import { RetroType, RetrospectiveModel } from '../../Modals/Retrospective.model';
 import { HubConnectionService } from 'src/app/Service/hub-connection.service';
 
 @Component({
@@ -65,7 +65,7 @@ export class RetrospectiveComponent implements OnInit {
   currentAction: RetroType;
   retroType = RetroType;
   RetroCommentsList: RetrospectiveModel[] = [];
-  retroRquestModel: RetrospectiveDbModel;
+
 
   constructor(private retroService: RetrospectiveService, private hubConnection: HubConnectionService) { }
 
@@ -79,10 +79,10 @@ export class RetrospectiveComponent implements OnInit {
     this.hubConnection.dataReceived.subscribe(msg => {
       console.log('Got Comments from HUB');
 
-      if (msg.actionToTaken === 'd') {
-        this.RetroCommentsList = this.RetroCommentsList.filter( x => x.retroCommentId !== msg.retroCommentId);
-      } else if (this.RetroCommentsList.filter(item => item.retroCommentId === msg.retroCommentId)[0]) {
-        const rr = this.RetroCommentsList.filter(item => item.retroCommentId === msg.retroCommentId)[0]
+      if (msg.action === 'd') {
+        this.RetroCommentsList = this.RetroCommentsList.filter( x => x.token !== msg.token);
+      } else if (this.RetroCommentsList.filter(item => item.token === msg.token)[0]) {
+        const rr = this.RetroCommentsList.filter(item => item.token === msg.token)[0];
         rr.type = msg.type;
         rr.voteUp = msg.voteUp;
         rr.voteDown = msg.voteDown;
@@ -112,7 +112,8 @@ export class RetrospectiveComponent implements OnInit {
   onTextEnter(event, retType: RetroType) {
     if (event !== undefined && event != null && event !== '' && event.toString().trim().length > 1) {
       const dd: RetrospectiveModel = {
-        retroCommentId: 0,
+        commentId: 0,
+        token: '',
         message: event,
         sprintId: 1,
         createdBy: 1,
@@ -120,7 +121,7 @@ export class RetrospectiveComponent implements OnInit {
         type: retType,
         voteDown: 0,
         voteUp: 0,
-        actionToTaken : '',
+        action : '',
         colorCode: this.retroService.GetColorForCardRandom()
       };
       this.hubConnection.SendMessage(dd);
@@ -134,20 +135,10 @@ export class RetrospectiveComponent implements OnInit {
     this.textEditorForWell = false;
   }
 
-  getComments() {
-    this.retroService.GetRetroComment(this.retroRquestModel).subscribe(res => { console.log(res); });
-  }
 
-  UpdateComment() {
-    this.retroService.UpdateRetroComment(this.retroRquestModel).subscribe(res => { console.log(res); });
-  }
-
-  DeleteComment() {
-    this.retroService.DeleteRetroComment(this.retroRquestModel).subscribe(res => { console.log(res); });
-  }
 
   onRetroItemClick(item: number) {
-    const dd = this.RetroCommentsList.filter(x => x.retroCommentId === item)[0];
+    const dd = this.RetroCommentsList.filter(x => x.commentId === item)[0];
     if (dd.type === RetroType.well) {
 
     } else if (dd.type === RetroType.wrong) {
@@ -156,9 +147,10 @@ export class RetrospectiveComponent implements OnInit {
 
   ConvertDivToText(event: any, RetroId: number) {
 
-    const retroObj = this.RetroCommentsList.filter(x => x.retroCommentId === RetroId)[0];
+    const retroObj = this.RetroCommentsList.filter(x => x.commentId === RetroId)[0];
     const textBox = document.createElement('textarea');
     textBox.setAttribute('id', 'attribute');
+    textBox.setAttribute('data_token', retroObj.token);
     textBox.setAttribute('class', 'textEditor');
     textBox.setAttribute('rows', '5');
     textBox.setAttribute('cols', '38');
@@ -170,24 +162,22 @@ export class RetrospectiveComponent implements OnInit {
     divInfo.appendChild(textBox);
     textBox.focus();
 
-    const imgRef = divInfo.nextSibling.firstElementChild as HTMLImageElement;
-    imgRef.style.visibility = 'hidden';
+    const imgRef = event.currentTarget as HTMLElement; //    divInfo.nextSibling.firstElementChild as HTMLImageElement;
+    imgRef.style.display = 'none';
 
     textBox.addEventListener('keyup', (ev) => {
-      // if (ev.srcElement.getAttribute('class') === 'plusIcon') {
-      //   //event handling code
-      // }
-
-      // Number 13 is the "Enter" key on the keyboard
-      // tslint:disable-next-line: deprecation
       if (ev.keyCode === 13) {
         const textRef = document.getElementById('attribute') as HTMLInputElement;
-        const imgRefShow = textRef.parentElement.nextSibling as HTMLImageElement;
-        imgRefShow.getElementsByTagName('img')[0].style.visibility = 'visible';
+        const tokenTemp = textRef.getAttribute('data_token');
+        (textRef.parentElement.nextElementSibling.getElementsByTagName('svg')[1]).style.display = 'block';
         textRef.parentElement.innerHTML = textRef.value;
         textRef.setAttribute('display', 'block');
         textRef.remove();
+        const tempComment = this.RetroCommentsList.filter(x => x.token === tokenTemp)[0];
+        tempComment.message = textRef.value;
+        this.hubConnection.SendMessage(tempComment);
       }
+      (ev.currentTarget as HTMLInputElement).focus();
     });
   }
 
@@ -210,21 +200,21 @@ export class RetrospectiveComponent implements OnInit {
     this.updateRetroType(parseInt(data, 0), retroType);
   }
 
-  updateRetroType(retroCommentId: number, retroType: RetroType) {
+  updateRetroType(commentId: number, retroType: RetroType) {
     console.log('updateRetroType called');
-    const tempComment = this.RetroCommentsList.filter(x => x.retroCommentId === retroCommentId)[0];
+    const tempComment = this.RetroCommentsList.filter(x => x.commentId === commentId)[0];
     tempComment.type = retroType;
     this.hubConnection.SendMessage(tempComment);
   }
 
-  deleteRetroPoint(event, retroCommentId) {
-    const tempComment = this.RetroCommentsList.filter(x => x.retroCommentId === retroCommentId)[0];
-    tempComment.actionToTaken = 'd';
+  deleteRetroPoint(event, commentId) {
+    const tempComment = this.RetroCommentsList.filter(x => x.commentId === commentId)[0];
+    tempComment.action = 'd';
     this.hubConnection.SendMessage(tempComment);
   }
-  GivenOneLike(event, retroCommentId) {
+  GivenOneLike(event, commentId) {
     console.log('updateRetroType called');
-    const tempComment = this.RetroCommentsList.filter(x => x.retroCommentId === retroCommentId)[0];
+    const tempComment = this.RetroCommentsList.filter(x => x.commentId === commentId)[0];
     tempComment.voteUp = tempComment.voteUp + 1;
     this.hubConnection.SendMessage(tempComment);
   }

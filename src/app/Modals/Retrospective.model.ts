@@ -1,5 +1,6 @@
 export class RetrospectiveModel {
-    retroCommentId: number;
+    commentId: number;
+    token: string;
     message: string;
     sprintId: number;
     type: RetroType;
@@ -8,20 +9,13 @@ export class RetrospectiveModel {
     editable: boolean;
     createdBy: number;
     colorCode: string;
-    actionToTaken: string;
+    action: string;
 }
 
 export enum RetroType {
     well = 1,
     wrong,
     action
-}
-
-export class RetrospectiveDbModel {
-    RetroId: number;
-    Message: string;
-    SprintId: number;
-    CreatedDate: Date;
 }
 
 export class CardColors {

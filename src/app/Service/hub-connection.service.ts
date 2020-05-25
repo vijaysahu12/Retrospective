@@ -43,70 +43,79 @@ export class HubConnectionService {
     console.log('RegisterSignalEvents() called');
     this.connection.on(this.MessageReceiver, (username: string, data: RetrospectiveModel) => {
       this.dataReceived.next(data);
-      console.log('Received Message.');
+      console.log('Received Message.' + JSON.stringify(data));
       // this.sendMessage();
     });
   }
 
   SendMessage(msg: RetrospectiveModel): void {
-    console.log('sendMessage() Called.');
-   
+
+    if (!msg.token) {
+      msg.token = this.GetToken(msg.sprintId);
+    }
+    console.log('sendMessage() Called.' + JSON.stringify(msg));
     this.connection
       .invoke(this.hubMethodName, 'vj', msg).finally()
       .catch(err => console.log(err));
   }
-  AddComment(retroModel: RetrospectiveModel) {
-    this.connection.send('newMessage', '', retroModel)
-      .then(() => console.log('msg send'));
-    // this.AddRetroComment(retroModel).subscribe(res => { console.log(res); });
+  // AddComment(retroModel: RetrospectiveModel) {
+  //   debugger;
+  //   if (!retroModel.token) {
+  //     retroModel.token = this.GetToken(retroModel.sprintId);
+  //   }
+  //   this.connection.send('newMessage', '', retroModel)
+  //     .then(() => console.log('msg send'));
+  //   // this.AddRetroComment(retroModel).subscribe(res => { console.log(res); });
+  // }
+
+  GetToken(sprintId: number) {
+
+    return sprintId + '_' + Math.floor(Math.random() * (999 - 0)) + 0;
   }
 }
 
-
-
-// GO
-// /****** Object:  StoredProcedure [dbo].[uspRetroAddorUPpdate]    Script Date: 25-05-2020 20:23:06 ******/
-// SET ANSI_NULLS ON
-// GO
-// SET QUOTED_IDENTIFIER ON
 // GO
 // --select * From RetroCOmments
-// -----------------------------------------------------------------
-// --exec [uspRetroAddorUPpdate] 1 , '22 Test from stored proecedure', 1, '#red' , 1, 1, 0 
+// -------------------------------------------------------------------------------------------------------
+// --exec [uspRetroAddorUPpdate] 1 , '22 Test from stored proecedure', 1, '#red' , 1, 1, 0
 // ALTER PROCEDURE [dbo].[uspRetroAddorUPpdate] 
-// 	@RetroCommentId int,
+// 	@CommentId int,
 // 	@SprintId INT,
+// 	@token varchar(50),
 // 	@Message NVARCHAR(500),
 // 	@CreatedBy INT,
 // 	@ColorCode NVARCHAR(15),
 // 	@Type INT,
 // 	@VoteDown INT ,
 // 	@VoteUp INT,
-// 	@actionToTaken varchar(10)
+// 	@action varchar(10)
 
-// AS 
+// AS
 // BEGIN
 
-// 	IF(isnull(@actionToTaken,'') = 'd')
-// 	BEGIN 
-// 		DELETE FROM RetroComments where SprintID = @SprintId AND RetroCommentId = @RetroCommentId
+// 	IF(isnull(@action,'') = 'd')
+// 	BEGIN
+// 		DELETE FROM RetroComments where SprintID = @SprintId AND CommentId = CommentId AND token = @token
 // 	END
 
 // 	ELSE BEGIN
-// 		IF EXISTS ( SELECT top 1 1 FROM RetroComments WHERE RetroCommentId = @RetroCommentId AND SprintId = @SprintId) 
+// 		IF EXISTS ( SELECT top 1 1 FROM RetroComments WHERE CommentId = CommentId AND SprintId = @SprintId AND token = @token)
 // 		BEGIN
-// 			UPDATE RetroComments 
-// 			set 
+// 			UPDATE RetroComments
+// 			set
 // 				Message = @Message,
 // 				ColorCode = @ColorCode,
 // 				VoteUp = @VoteUp,
 // 				VoteDown = @VoteDown,
 // 				[Type] = @Type
 // 			WHERE SprintId = @SprintId
-// 			AND RetroCommentId = @RetroCommentId
+// 			AND CommentId = CommentId
+// 			AND token = @token
 // 		END
 // 		ELSE BEGIN
-// 			INSERT INTO RetroComments values (@Message, @SprintId , 1,@CreatedBy ,@ColorCode ,@Type , @VoteDown  , @VoteUp  )
+// 			INSERT INTO RetroComments
+// 				(token,[Message],SprintId,Editable,CreatedBy,ColorCode,Type,VoteDown,VoteUp)
+// 		values (@token, @Message, @SprintId , 1,@CreatedBy ,@ColorCode ,@Type , @VoteDown  , @VoteUp  )
 // 		end
 // 	end
 // 	SELECT 1 as Result
@@ -115,27 +124,51 @@ export class HubConnectionService {
 
 
 
+
+
+
+
 // CREATE TABLE RetroSprint(
 // 	SprintId INT PRIMARY KEY IDENTITY(1,1),
 // 	Description varchar(100),
-// 	Token varchar(50), 
-// 	CreatedDate date , 
+// 	Token varchar(50),
+// 	CreatedDate date ,
 // 	CreatedBy INT
 // )
 
- 
-// CREATE TABLE RetroComments (
-// 	RetroCommentId INT PRIMARY KEY IDENTITY(1 ,1), 
-// 	Message NVARCHAR(500),
-// 	SprintId INT,
-// 	Editable BIT,
-// 	CreatedBy INT,
-// 	ColorCode NVARCHAR(15),
-// 	Type INT,
-// 	VoteDown INT ,
-// 	VoteUp INT,
-// 	FOREIGN KEY (SprintId) REFERENCES RetroSprint(SprintId) 
-// )
+
+// GO
+
+// CREATE TABLE [dbo].[RetroComments](
+// 	[CommentId] [int] IDENTITY(1,1) NOT NULL,
+// 	[token] [varchar](50) NOT NULL,
+// 	[Message] [nvarchar](500) NULL,
+// 	[SprintId] [int] NULL,
+// 	[Editable] [bit] NULL,
+// 	[CreatedBy] [int] NULL,
+// 	[ColorCode] [nvarchar](15) NULL,
+// 	[Type] [int] NULL,
+// 	[VoteDown] [int] NULL,
+// 	[VoteUp] [int] NULL,
+//  CONSTRAINT [PK__RetroCom__93CBA2437CF14AC9] PRIMARY KEY CLUSTERED
+// (
+// [CommentId] ASC
+// )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+// ) ON [PRIMARY]
+// GO
+
+// SET ANSI_PADDING OFF
+// GO
+
+// ALTER TABLE [dbo].[RetroComments]  WITH CHECK ADD  CONSTRAINT [FK__RetroComm__Sprin__1F63A897] FOREIGN KEY([SprintId])
+// REFERENCES [dbo].[RetroSprint] ([SprintId])
+// GO
+
+// ALTER TABLE [dbo].[RetroComments] CHECK CONSTRAINT [FK__RetroComm__Sprin__1F63A897]
+// GO
+
+
+
 
 
 

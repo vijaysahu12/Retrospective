@@ -7,7 +7,8 @@ namespace Retro.SignalR.Modals
 {
   public class RetroModel
   {
-    public int RetroCommentId { get; set; }
+    public int CommentId { get; set; }
+    public string token { get; set; }
     public int SprintId { get; set; }
     public int VoteUp { get; set; }
     public int VoteDown { get; set; }
@@ -16,7 +17,7 @@ namespace Retro.SignalR.Modals
     public RetroType Type { get; set; }
     public string ColorCode { get; set; }
     public int CreatedBy { get; set; }
-    public string actionToTaken { get; set; }
+    public string action { get; set; }
   }
 
   public enum RetroType

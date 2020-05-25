@@ -1,13 +1,3 @@
-.mainContainer {
-  width: 60%;
-  height: auto;
-  position: relative;
-  padding: 8px 0px 0px 6px;
-  border-radius: 4px;
-  display: flex;
-  flex-direction: row;
-  transform: translateX(31%);
-}
 
 .retroContainer {
   position: relative;
@@ -21,6 +11,8 @@
 
 .headingText {
   color: white;
+  width: 69%;
+  border-bottom: 1px solid white;
 }
 
 .flex-containerColumn {
@@ -52,6 +44,7 @@
   padding: 2px 3px;
   font-size: 18px;
   text-align: left; 
+  border: 1px solid white;
   border-radius: 10px;
   /* box-shadow: 0px 0px 10px 2px rgba(70, 70, 70, 0.98); */
 }
@@ -343,7 +336,8 @@ i {
    }
 
    .vote {
-     margin-top: -2px;
+    font-size: large;
+    font-variant-numeric: diagonal-fractions;
    }
 
   .plusIcon {
@@ -352,5 +346,112 @@ i {
  margin-top: -4px;
  float: right;
  cursor: pointer;
+ color: white;
+ /* box-shadow: 1px 1px 1px silver; */
  /* background: url('../../../assets/icons/plus.png') no-repeat center center fixed;; */
+}
+
+.sideNavigation{
+  width: 20%;
+  height: 50%;
+  background: rgb(223, 219, 219);
+  position: absolute;
+  left: 0em;
+  -webkit-transform: translateY(10%);
+  transform: translateY(20vh);
+  cursor: pointer ;
+  margin-left: -18%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  animation-duration: 0.8s;
+  animation-name: changewidth;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+ .sideNavigation:hover{
+   width: 10%!important;
+  transition: 1.2ms ease-in;
+  z-index: 1;
+  margin-left: 0%;
+  overflow: auto;
+  animation-name: none;
+} 
+  
+ 
+@keyframes changewidth {
+  from {
+    background-color: black;
+  }
+
+  to {
+    background-color: white;
+  }
+}
+
+ 
+
+.sideNavigation ul {
+  list-style: none;
+  /* overflow-y: auto; */
+}
+
+/* .sideNavigation ul li {
+  flex-grow: 1;
+  flex-shrink: 1;
+} */
+ .sideNavigation img {
+   width: 50%;
+   /* margin: 1%; */
+   flex-grow: 1;
+   flex-shrink: 1;
+ }
+
+
+
+@media screen and (min-width: 800px){
+  .mainContainer {
+    width: 100%;
+    height: auto;
+    position: relative;
+    padding: 8px 0px 0px 6px;
+    border-radius: 4px;
+    display: flex; 
+    transform: translateX(0%);
+}
+}
+
+@media screen and (min-width: 1200px){
+  .mainContainer {
+    width: 60%;
+    height: auto;
+    position: relative;
+    padding: 8px 0px 0px 6px;
+    border-radius: 4px;
+    display: flex;
+    transform: translateX(31%);
+  }
+}
+
+
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #0e0c0c;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgb(169, 238, 9);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(169, 238, 9);
 }

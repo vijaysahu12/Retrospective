@@ -7,7 +7,8 @@ namespace PetroConnect.Data.Context
 {
   public class uspRetroGet_Result
   {
-    public int RetroCommentId { get; set; }
+    public int CommentId { get; set; }
+    public string token { get; set; }
     public int SprintId { get; set; }
     public int VoteUp { get; set; }
     public int VoteDown { get; set; }

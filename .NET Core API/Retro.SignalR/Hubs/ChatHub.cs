@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.SignalR;
 using Retro.SignalR.Modals;
 using Retrospective;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Retro.SignalR.Hubs
