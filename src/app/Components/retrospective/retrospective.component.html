@@ -1,18 +1,6 @@
-<div class="sideNavigation">
-  <ul>
-    <li> <img src="../../../assets/icons/plus.png" /></li>
-    <li> <img src="../../../assets/icons/plus.png" /></li>
-    <li> <img src="../../../assets/icons/plus.png" /></li>
-    <li> <img src="../../../assets/icons/plus.png" /></li>
-    <li> <img src="../../../assets/icons/plus.png" /></li>
-    <li> <img src="../../../assets/icons/plus.png" /></li>
-    <li> <img src="../../../assets/icons/plus.png" /></li>
-    <li> <img src="../../../assets/icons/plus.png" /></li>
-    <li> <img src="../../../assets/icons/plus.png" /></li>
-    <li> <img src="../../../assets/icons/plus.png" /></li>
-    <li> <img src="../../../assets/icons/plus.png" /></li>
-    <li> <img src="../../../assets/icons/plus.png" /></li>
-    <li> <img src="../../../assets/icons/plus.png" /></li>
+<div class="sideNavigation" *ngIf="activeUserList.length > 0">
+  <ul *ngFor='let item of activeUserList'>
+    <li> <img src="../../../assets/icons/profileImage.png" [title]="item.userName" /></li>
   </ul>
 </div>
 

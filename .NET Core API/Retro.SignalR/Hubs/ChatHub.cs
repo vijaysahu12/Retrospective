@@ -24,9 +24,12 @@ namespace Retro.SignalR.Hubs
     [EnableCors("AuthCorsPolicy")]
     public async Task NewMessage(string username, RetroModel message)
     {
-      _retroService.RetroAddOrUpdateOrDelete(message);
+      if (message != null)
+      {
+        _retroService.RetroAddOrUpdateOrDelete(message);
+      }
       await Clients.All.SendAsync("messageReceived", username, message);
-      
+
     }
 
   }

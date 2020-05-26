@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
-import {  RetrospectiveModel } from '../Modals/Retrospective.model';
+import {  RetrospectiveModel, ActiveUser } from '../Modals/Retrospective.model';
 
 import { Subject } from 'rxjs';
 @Injectable({
@@ -12,6 +12,8 @@ export class HubConnectionService {
   singalRUrl = 'http://localhost:56466/chat';
   connection: signalR.HubConnection;
   dataReceived = new Subject<RetrospectiveModel>();
+  userReceived = new Subject<string>();
+  userName: string;
   constructor() {
     this.BuildConnection();
     this.StartConnection();
@@ -41,36 +43,46 @@ export class HubConnectionService {
 
   RegisterSignalEvents() {
     console.log('RegisterSignalEvents() called');
+    this.SendMessageToGetUser(this.userName);
     this.connection.on(this.MessageReceiver, (username: string, data: RetrospectiveModel) => {
       this.dataReceived.next(data);
+      this.userReceived.next(username);
       console.log('Received Message.' + JSON.stringify(data));
-      // this.sendMessage();
+      console.log('Received Message userName.' + JSON.stringify(username));
     });
   }
 
-  SendMessage(msg: RetrospectiveModel): void {
+  SendMessage(userName: string, msg: RetrospectiveModel): void {
 
     if (!msg.token) {
       msg.token = this.GetToken(msg.sprintId);
     }
     console.log('sendMessage() Called.' + JSON.stringify(msg));
     this.connection
-      .invoke(this.hubMethodName, 'vj', msg).finally()
+      .invoke(this.hubMethodName, userName, msg).finally()
       .catch(err => console.log(err));
   }
-  // AddComment(retroModel: RetrospectiveModel) {
-  //   debugger;
-  //   if (!retroModel.token) {
-  //     retroModel.token = this.GetToken(retroModel.sprintId);
-  //   }
-  //   this.connection.send('newMessage', '', retroModel)
-  //     .then(() => console.log('msg send'));
-  //   // this.AddRetroComment(retroModel).subscribe(res => { console.log(res); });
-  // }
 
   GetToken(sprintId: number) {
-
     return sprintId + '_' + Math.floor(Math.random() * (999 - 0)) + 0;
+  }
+  SendMessageToGetUser(userName: string): void {
+    const dd: RetrospectiveModel = {
+      commentId: 0,
+      token: '',
+      message: '',
+      sprintId: 1,
+      createdBy: 1,
+      editable: true,
+      type: 0,
+      voteDown: 0,
+      voteUp: 0,
+      action : '',
+      colorCode: ''
+    };
+    this.connection
+      .invoke(this.hubMethodName, userName, dd).finally()
+      .catch(err => console.log(err));
   }
 }
 

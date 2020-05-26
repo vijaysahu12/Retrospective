@@ -22,3 +22,8 @@ export class CardColors {
     ColorCode: string;
     ColorId: number;
 }
+
+export class ActiveUser {
+    userName: string;
+    profileImage: string;
+}

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { trigger, state, style, transition, animate, query, stagger, keyframes } from '@angular/animations';
 import { RetrospectiveService } from '../../Service/retrospective.service';
-import { RetroType, RetrospectiveModel } from '../../Modals/Retrospective.model';
+import { RetroType, RetrospectiveModel, ActiveUser } from '../../Modals/Retrospective.model';
 import { HubConnectionService } from 'src/app/Service/hub-connection.service';
 
 @Component({
@@ -65,31 +65,41 @@ export class RetrospectiveComponent implements OnInit {
   currentAction: RetroType;
   retroType = RetroType;
   RetroCommentsList: RetrospectiveModel[] = [];
-
+  userName = 'vijay';
+  activeUserList: ActiveUser[] = [];
 
   constructor(private retroService: RetrospectiveService, private hubConnection: HubConnectionService) { }
 
   ngOnInit() {
-    // this.sendMessage();
+    // this.SendMessage(userName: string,(userName: string,();
     this.retroService.GetRetroCommentList(1).subscribe(x => {
       console.log('Got Comments from APi');
       this.RetroCommentsList = x;
     });
-
     this.hubConnection.dataReceived.subscribe(msg => {
-      console.log('Got Comments from HUB');
+      console.log('Got retro comments from HUB');
+      if (msg !== null && msg.token !== '') {
+        if (msg.action === 'd') {
+          this.RetroCommentsList = this.RetroCommentsList.filter(x => x.token !== msg.token);
+        } else if (this.RetroCommentsList.filter(item => item.token === msg.token)[0]) {
+          const rr = this.RetroCommentsList.filter(item => item.token === msg.token)[0];
+          rr.type = msg.type;
+          rr.voteUp = msg.voteUp;
+          rr.voteDown = msg.voteDown;
 
-      if (msg.action === 'd') {
-        this.RetroCommentsList = this.RetroCommentsList.filter( x => x.token !== msg.token);
-      } else if (this.RetroCommentsList.filter(item => item.token === msg.token)[0]) {
-        const rr = this.RetroCommentsList.filter(item => item.token === msg.token)[0];
-        rr.type = msg.type;
-        rr.voteUp = msg.voteUp;
-        rr.voteDown = msg.voteDown;
-
-        this.RetroCommentsList = this.RetroCommentsList;
-      } else {
-        this.RetroCommentsList = this.RetroCommentsList.concat(msg);
+          this.RetroCommentsList = this.RetroCommentsList;
+        } else {
+          this.RetroCommentsList = this.RetroCommentsList.concat(msg);
+        }
+      }
+    });
+    this.hubConnection.userReceived.subscribe(user => {
+      if (this.activeUserList.filter(x => x.userName !== user)) {
+        this.activeUserList.push({
+          userName: user,
+          profileImage: ''
+        });
+        this.activeUserList = this.activeUserList;
       }
     });
   }
@@ -121,10 +131,10 @@ export class RetrospectiveComponent implements OnInit {
         type: retType,
         voteDown: 0,
         voteUp: 0,
-        action : '',
+        action: '',
         colorCode: this.retroService.GetColorForCardRandom()
       };
-      this.hubConnection.SendMessage(dd);
+      this.hubConnection.SendMessage(this.userName, (dd));
       this.textAreaValue = '';
     }
     this.hideShowTextEditor();
@@ -175,7 +185,7 @@ export class RetrospectiveComponent implements OnInit {
         textRef.remove();
         const tempComment = this.RetroCommentsList.filter(x => x.token === tokenTemp)[0];
         tempComment.message = textRef.value;
-        this.hubConnection.SendMessage(tempComment);
+        this.hubConnection.SendMessage(this.userName, tempComment);
       }
       (ev.currentTarget as HTMLInputElement).focus();
     });
@@ -197,26 +207,26 @@ export class RetrospectiveComponent implements OnInit {
     ev.preventDefault();
     const data = ev.dataTransfer.getData('token');
     ev.target.appendChild(document.getElementById(data));
-    this.updateRetroType(data , retroType);
+    this.updateRetroType(data, retroType);
   }
 
   updateRetroType(token: string, retroType: RetroType) {
     console.log('updateRetroType called');
     const tempComment = this.RetroCommentsList.filter(x => x.token === token)[0];
     tempComment.type = retroType;
-    this.hubConnection.SendMessage(tempComment);
+    this.hubConnection.SendMessage(this.userName, tempComment);
   }
 
   deleteRetroPoint(event, token) {
     const tempComment = this.RetroCommentsList.filter(x => x.token === token)[0];
     tempComment.action = 'd';
-    this.hubConnection.SendMessage(tempComment);
+    this.hubConnection.SendMessage(this.userName, tempComment);
   }
   GivenOneLike(event, token) {
     console.log('updateRetroType called');
     const tempComment = this.RetroCommentsList.filter(x => x.token === token)[0];
     tempComment.voteUp = tempComment.voteUp + 1;
-    this.hubConnection.SendMessage(tempComment);
+    this.hubConnection.SendMessage(this.userName, tempComment);
   }
   notAllowDrop(ev) {
     ev.preventDefault();
