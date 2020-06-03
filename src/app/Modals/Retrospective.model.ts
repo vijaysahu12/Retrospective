@@ -27,3 +27,9 @@ export class ActiveUser {
     userName: string;
     profileImage: string;
 }
+
+
+export class RetroSprintModal {
+    SprintToken: string;
+    ProjectName: string;
+}

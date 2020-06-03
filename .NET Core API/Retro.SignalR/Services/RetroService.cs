@@ -13,8 +13,9 @@ namespace Retrospective
 {
   public interface IRetroService
   {
-    int RetroAddOrUpdateOrDelete(RetroModel retro);
-    List<RetroModel> RetroGet(int sprintId);
+    int CommentsAddOrUpdateOrDelete(RetroModel retro);
+    List<RetroModel> RetroGet(string RetroToken);
+    bool RetroAdd(RetroSprintModal retro);
   }
   public class RetroService : IRetroService
   {
@@ -23,13 +24,13 @@ namespace Retrospective
     {
       _connectContext = connectContext;
     }
-    public int RetroAddOrUpdateOrDelete(RetroModel retro)
+    public int CommentsAddOrUpdateOrDelete(RetroModel retro)
     {
       try
       {
         var result = _connectContext.uspRetroAddorUPpdate.FromSqlRaw("exec uspRetroAddorUPpdate {0} , {1} , {2} , {3} , {4}, {5}, {6} , {7} , {8} , {9}",
             retro.CommentId,
-            
+
             retro.SprintId,
             retro.token,
             retro.Message,
@@ -48,18 +49,18 @@ namespace Retrospective
       }
     }
 
-    public List<RetroModel> RetroGet(int sprintId)
+    public List<RetroModel> RetroGet(string RetroToken)
     {
       try
       {
         var result = _connectContext.uspRetroGet
-          .FromSqlRaw("exec uspRetroGet {0} ", sprintId)
+          .FromSqlRaw("exec uspRetroGet {0} ", RetroToken)
           .ToList().AsEnumerable();
         return result.Select(x => new RetroModel
         {
           CommentId = x.CommentId,
           token = x.token,
-          SprintId = sprintId,
+          SprintId = x.SprintId,
           Message = x.Message,
           ColorCode = x.ColorCode,
           CreatedBy = x.CreatedBy,
@@ -72,6 +73,23 @@ namespace Retrospective
       catch (Exception ex)
       {
         return new List<RetroModel>();
+      }
+    }
+
+    public bool RetroAdd(RetroSprintModal retro)
+    {
+      try
+      {
+        var result = _connectContext.uspRetroAddorUPpdate.FromSqlRaw("exec uspRetroAdd {0} , {1} , {2} ",
+            retro.ProjectName,
+            retro.SprintToken,
+            1
+            ).ToList();
+        return result != null && result.FirstOrDefault().Result <=2;
+      }
+      catch (Exception ex)
+      {
+        return false;
       }
     }
 

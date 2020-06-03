@@ -1,13 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { trigger, state, style, transition, animate, query, stagger, keyframes } from '@angular/animations';
 import { RetrospectiveService } from '../../Service/retrospective.service';
-import { RetroType, RetrospectiveModel, ActiveUser } from '../../Modals/Retrospective.model';
+import { RetroType, RetrospectiveModel, ActiveUser, RetroSprintModal } from '../../Modals/Retrospective.model';
 import { HubConnectionService } from 'src/app/Service/hub-connection.service';
+import { DatePipe } from '@angular/common';
+import { SSL_OP_ALL } from 'constants';
 
 @Component({
   selector: 'app-retrospective',
   templateUrl: './retrospective.component.html',
-  styleUrls: ['./retrospective.component.css'],
+  styleUrls: ['./retrospective.component.css'] ,
   animations: [
     trigger('shrinkOut', [
       transition('* => *', [ // each time the binding value changes
@@ -57,7 +59,10 @@ import { HubConnectionService } from 'src/app/Service/hub-connection.service';
 
   ]
 })
-export class RetrospectiveComponent implements OnInit {
+export class RetrospectiveComponent implements OnInit , OnDestroy {
+  retroStarted = false;
+
+  darkMode: boolean;
   colorCodeIs: 'red';
   textAreaValue = '';
   textEditorForWell = false;
@@ -66,16 +71,29 @@ export class RetrospectiveComponent implements OnInit {
   retroType = RetroType;
   RetroCommentsList: RetrospectiveModel[] = [];
   userName = 'vijay';
+  startRetroSprint: RetroSprintModal = {
+    ProjectName: '',
+    SprintToken: ''
+  };
   activeUserList: ActiveUser[] = [];
 
-  constructor(private retroService: RetrospectiveService, private hubConnection: HubConnectionService) { }
+  constructor(private retroService: RetrospectiveService, private hubConnection: HubConnectionService , private datePipe: DatePipe) { }
 
   ngOnInit() {
-    // this.SendMessage(userName: string,(userName: string,();
-    this.retroService.GetRetroCommentList(1).subscribe(x => {
-      console.log('Got Comments from APi');
-      this.RetroCommentsList = x;
-    });
+
+    const RetroToken = localStorage.getItem('retroStarted.SprintName');
+    const ExpiryDate = localStorage.getItem('retroStarted.ExpiryDate');
+    if (RetroToken === null || this.datePipe.transform(new Date(ExpiryDate).getTime() , 'yyyy-MM-dd' ) <
+    this.datePipe.transform( new Date().getTime(), 'yyyy-MM-dd' )) {
+      this.retroStarted = false;
+    } else {
+      this.retroService.GetRetroCommentList(parseFloat(RetroToken)).subscribe(x => {
+        console.log('Got Comments from APi');
+        this.RetroCommentsList = x;
+        this.retroStarted = true;
+      });
+    }
+
     this.hubConnection.dataReceived.subscribe(msg => {
       console.log('Got retro comments from HUB');
       if (msg !== null && msg.token !== '') {
@@ -104,6 +122,9 @@ export class RetrospectiveComponent implements OnInit {
     });
   }
 
+  ngOnDestroy() {
+    localStorage.clear();
+  }
   addItem(actionType: RetroType) {
     this.currentAction = actionType;
     this.hideShowTextEditor();
@@ -230,6 +251,20 @@ export class RetrospectiveComponent implements OnInit {
   }
   notAllowDrop(ev) {
     ev.preventDefault();
+  }
+
+  onRetroStarted() {
+
+    if (this.startRetroSprint.ProjectName === '' || this.startRetroSprint.SprintToken === '') {
+      return;
+    }
+
+    this.retroStarted = true;
+    localStorage.setItem('retroStarted.SprintName', this.startRetroSprint.SprintToken.toString());
+    localStorage.setItem('retroStarted.ExpiryDate', new Date().toString());
+
+    this.startRetroSprint.SprintToken = this.startRetroSprint.SprintToken.toString();
+    this.retroService.AddSprint(this.startRetroSprint).subscribe(res => console.log('sprint add : ' + res));
   }
 }
 

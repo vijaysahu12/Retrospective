@@ -26,7 +26,7 @@ namespace Retro.SignalR.Hubs
     {
       if (message != null)
       {
-        _retroService.RetroAddOrUpdateOrDelete(message);
+        _retroService.CommentsAddOrUpdateOrDelete(message);
       }
       await Clients.All.SendAsync("messageReceived", username, message);
 

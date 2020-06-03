@@ -1,0 +1,104 @@
+caption {
+    display: flex;
+    flex-direction: column;
+    width: 33%;
+    height: 100%;
+    justify-content: center;
+    align-content: center;
+    align-self: center;
+    background-color:white;
+    border: 1px solid black;
+    border-radius: 10px ;
+    box-shadow: 10px 1px 11px 2px lightgray;
+}
+
+section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-self: center;
+    align-content: center;
+}
+
+caption * {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+}
+ 
+
+caption > header {
+    display: flex;
+    border-radius: 9px 9px 0px 0px;
+    height: 60px;
+    background-color: rgb(189, 33, 48);
+    justify-content: center;
+    padding: 10px;
+}
+
+caption > header > div {
+    justify-content: center;
+    align-self: center;
+    font-weight: 700;
+    font-size: 20px;
+
+}
+
+caption > main {
+    margin: 10px;
+}
+
+main label {
+    font-weight: 800;
+    font-size: 17px;
+    color: black;
+    height: 25px;
+}
+
+main > div {
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    flex-basis: auto;
+}
+
+footer {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+footer > button {
+    width: 94%;
+    margin: 10px;
+    height: 50px;
+    border: 1px solid lightgray;
+    font-weight: 800;
+    font-size: 18px;
+    vertical-align: middle;
+}
+footer > button:hover {
+    background-color: lightskyblue;
+    transition: ease-in 1ms;
+    cursor: pointer;
+}
+input {
+    font-weight: 700;
+    font-size: 18px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    width: 94%;
+    height: 40px;
+    border-radius: 10px;
+    border: 1px solid gray;
+    box-shadow: 5px 2px 14px 1px #b3b3b3;
+    padding: 5px;
+}
+
+input::placeholder {
+    font-weight: 600;
+    color: lightgray;
+}
+
+input:active {
+    border: 1px solid greenyellow;
+    border-radius: 10px;
+}

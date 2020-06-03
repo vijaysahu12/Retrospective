@@ -1,0 +1,458 @@
+
+.retroContainer {
+    position: relative;
+    width: 100%;
+    height: 90%;
+    font-family: Arial,
+      Helvetica,
+      sans-serif;
+    /* background: linear-gradient(45deg, #2d89ec 0%, rgb(110, 181, 181) 100%); */
+  }
+  
+  .headingText {
+    color: white;
+    width: 69%;
+    border-bottom: 1px solid white;
+  }
+  
+  .flex-containerColumn {
+    display: flex;
+    width: 33%;
+    flex-direction: column;
+    /* background: #c8e49c; */
+  }
+  
+  .RetroActionItem {
+    border: 1px solid black;
+  
+  }
+  
+  .flex-containerRight {
+    /* background-color: #f1f1f1; */
+    margin: 10px;
+    padding: 20px;
+    font-size: 30px;
+  }
+  
+  .flex-container {
+    display: flex;
+  }
+  
+  .flex-container > div {
+    width: 32%;
+    margin: 9px;
+    padding: 2px 3px;
+    font-size: 18px;
+    text-align: left; 
+    border: 1px solid white;
+    border-radius: 10px;
+    /* box-shadow: 0px 0px 10px 2px rgba(70, 70, 70, 0.98); */
+  }
+  
+  .retroTypeHeading {
+    margin: 5px;
+    display: flex;
+    flex-direction: row;
+    
+  }
+  
+  .retroTypeHeading > .plus.pngflex-item {
+    flex: auto;
+  }
+  
+  .retroTypeHeading > .raw-item {
+    width: 5rem;
+    cursor: pointer;
+  }
+  
+  
+  .retroPoint {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    margin: 6px 4px;
+    text-align: left;
+    border-radius: 4px;
+    cursor: grab;
+    box-shadow:  0px 0px 10px 1px rgba(0, 0, 0, 0.3);
+    min-height: 56px;
+    color: white;
+    border-radius: 0px 28px 0px 28px;
+    border: 1px solid white;
+  }
+  .retroPoint:active {
+    cursor: grabbing;
+  }
+   
+  .retroPoint::before {
+    width: 100px;
+  }
+  
+  .retroPoint::after {
+    width: 100px;
+  }
+  
+  .retroPoint::first-letter {
+    font-weight: bold;
+    text-transform: uppercase;
+    /* color: red; */
+  }
+  
+  .retroPoint > div:first-child {
+    padding: 6px 7px;    
+    word-break: break-word;
+    padding: 6px 7px;
+      font-family: cursive;
+      word-spacing: 0.8px;
+  }
+  
+  .retroPoint > div:last-child {
+    height: 20px;
+  }
+   
+  
+  .flex-containerColumn>span {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 15px;
+    cursor: pointer;
+    margin: 9px 5px;
+    font-weight: 500;
+  }
+  
+  
+  .wentWellTextArea {
+    padding: 2px 2px;
+    margin: 2px 1px;
+    background: transparent;
+    box-sizing: border-box;
+    box-shadow: 1px -3px 10px 0px rgba(39, 38, 38, 0.61);
+    border-radius: 5px;
+  }
+  
+  .AddTextEditor {
+    border: 1px solid #1b8010;
+    background: #1b8010;
+    border-radius: 4px;
+    width: 12%;
+    height: auto;
+    padding: 0.4%;
+    float: right;
+    font-size: large;
+    font-weight: 400;
+    color: black;
+    cursor: pointer;
+    margin-left: 2px;
+  }
+  
+  .closeTextEditor {
+    border: 1px solid #bd213040;
+    background: #bd213040;
+    border-radius: 4px;
+    width: 12%;
+    height: auto;
+    padding: 0.4%;
+    float: right;
+    font-size: large;
+    font-weight: 400;
+    color: black;
+    cursor: pointer;
+  }
+  
+  .closeTextEditor:hover {
+    color: white;
+    box-shadow: 1px 5px 8px 1px rgba(140, 230, 36, 0.45);
+  }
+  
+  .AddTextEditor:hover {
+    color: white;
+    box-shadow: 1px 5px 8px 1px rgba(140, 230, 36, 0.45);
+  }
+  
+  
+  .well {
+    background: #f3f3f3;
+  
+  }
+  
+  
+  textarea {
+    resize: vertical;
+  }
+  
+  .wrong {
+    /* background: #f3f3f3; */
+  
+  }
+  
+  .textEditor {
+    overflow: hidden;
+    border: 2px solid #888;
+    border-radius: 4px;
+    width: 98%;
+  }
+  
+  
+  
+  .black_overlay {
+    display: block;
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    z-index: 1001;
+    -moz-opacity: 0.8;
+    opacity: .80;
+    filter: alpha(opacity=80);
+  }
+  
+  .textAreaContainer {
+    display: block;
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    width: 50%;
+    height: 46%;
+    padding: 16px;
+    border: 1px solid orange;
+    border-radius: 4px;
+    background-color: white;
+    z-index: 1002;
+    overflow: auto;
+  }
+  
+  
+  
+  
+  i {
+    border: solid black;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+  }
+  
+  .right {
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+  }
+  
+  .left {
+    transform: rotate(135deg);
+    -webkit-transform: rotate(135deg);
+  }
+  
+  .up {
+    transform: rotate(-135deg);
+    -webkit-transform: rotate(-135deg);
+  }
+  
+  .down {
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+  }
+  
+  
+  
+  
+  
+  
+  /* Draggable*/
+  
+  .drag-border {
+    border: #ff525b dashed 2px;
+  }
+  
+  .drag-over {
+    border: #ff525b dashed 2px;
+  }
+  
+  .drag-hint {
+    border: #ffc100 dashed 2px;
+    /*transition: all .2s ease-in-out;*/
+    /*transform: scale(1.05);*/
+  }
+  
+  .drag-target-border {
+    border: #00bfff dashed 2px;
+  }
+  
+  .drag-handle {
+    cursor: move; /* fallback if grab cursor is unsupported */
+    cursor: grab;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+  }
+  
+  .drag-handle:active { 
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+  }
+  
+  /* Droppable */
+  
+  .drag-hint-border {
+    border: #3c763d dashed 2px;
+  }
+  
+  .drag-over-border {
+    border: #fbbc05 dashed 2px;
+  }
+  
+  .drag-transit {
+    border: #3500FF dashed 2px;
+  }
+  
+  
+  .container{
+    width: 1200px;
+    height: 1200px;
+    padding: 30px;
+    background-color: black;
+  }
+  
+  .voteContainer {
+    position: absolute;
+    top: 5%;
+    left: 92%;
+    cursor: pointer;
+    padding: 0px 0px;
+  }
+   
+    #div1, #div2 {
+      float: left;
+      width: 100px;
+      height: 35px;
+      margin: 10px;
+      padding: 10px;
+      border: 1px solid black;
+    }
+    .addUpdateIcon {
+      width: 27px;
+      height: 14px;
+      float: right;
+      cursor: pointer;
+     }
+  
+     .vote {
+      font-size: large;
+      font-variant-numeric: diagonal-fractions;
+     }
+  
+    .plusIcon {
+   width: 26px;
+   height: 26px;
+   margin-top: -4px;
+   float: right;
+   cursor: pointer;
+   color: white;
+   /* box-shadow: 1px 1px 1px silver; */
+   /* background: url('../../../assets/icons/plus.png') no-repeat center center fixed;; */
+  }
+  
+  .sideNavigation{
+    width: 20%;
+    height: 50%;
+    background: rgb(223, 219, 219);
+    position: absolute;
+    left: 0em;
+    -webkit-transform: translateY(10%);
+    transform: translateY(20vh);
+    cursor: pointer ;
+    margin-left: -18%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  
+    animation-duration: 0.8s;
+    animation-name: changewidth;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+  }
+  
+   .sideNavigation:hover{
+     width: 10%!important;
+    transition: 1.2ms ease-in;
+    z-index: 1;
+    margin-left: 0%;
+    overflow: auto;
+    animation-name: none;
+  } 
+    
+   
+  @keyframes changewidth {
+    from {
+      background-color: black;
+    }
+  
+    to {
+      background-color: white;
+    }
+  }
+  
+   
+  
+  .sideNavigation ul {
+    list-style: none;
+    /* overflow-y: auto; */
+  }
+  
+  /* .sideNavigation ul li {
+    flex-grow: 1;
+    flex-shrink: 1;
+  } */
+   .sideNavigation img {
+     width: 50%;
+     /* margin: 1%; */
+     flex-grow: 1;
+     flex-shrink: 1;
+   }
+  
+  
+  
+  @media screen and (min-width: 800px){
+    .mainContainer {
+      width: 100%;
+      height: auto;
+      position: relative;
+      padding: 8px 0px 0px 6px;
+      border-radius: 4px;
+      display: flex; 
+      transform: translateX(0%);
+  }
+  }
+  
+  @media screen and (min-width: 1200px){
+    .mainContainer {
+      width: 60%;
+      height: auto;
+      position: relative;
+      padding: 8px 0px 0px 6px;
+      border-radius: 4px;
+      display: flex;
+      transform: translateX(31%);
+    }
+  }
+  
+  
+  /* width */
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #0e0c0c;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: rgb(169, 238, 9);
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgb(169, 238, 9);
+  }
+  

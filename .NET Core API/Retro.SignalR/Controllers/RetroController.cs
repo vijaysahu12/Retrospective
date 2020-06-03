@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Retro.SignalR.Modals;
 using Retrospective;
 
 namespace Retro.SignalR.Controllers
@@ -21,9 +22,17 @@ namespace Retro.SignalR.Controllers
 
     // GET: api/Retro/5
     [HttpGet]
-    public IActionResult Get(int sprintId)
+    public IActionResult Get(string RetroToken)
     {
-      var result = _retroService.RetroGet(sprintId);
+      var result = _retroService.RetroGet(RetroToken);
+      return Ok(result);
+    }
+
+
+    [HttpPost]
+    public IActionResult Post(RetroSprintModal retro)
+    {
+      var result = _retroService.RetroAdd(retro);
       return Ok(result);
     }
 

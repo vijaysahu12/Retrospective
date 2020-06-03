@@ -1,6 +1,6 @@
 import { Injectable, OnInit } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { RetrospectiveModel, CardColors, RetroType } from '../Modals/Retrospective.model';
+import { RetrospectiveModel, CardColors, RetroType, RetroSprintModal } from '../Modals/Retrospective.model';
 import { HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { min, max } from 'rxjs/operators';
@@ -11,31 +11,26 @@ export class RetrospectiveService implements OnInit {
 
   constructor(private _httpClient: HttpClient) { }
   url = 'http://localhost:56466/api/';
-  addUrl: 'Retro';
+  addUrl = 'Retro';
 
   ngOnInit() { }
 
- 
-
-  GetRetroCommentList(sprintId: number): Observable<RetrospectiveModel[]> {
-    return this._httpClient.get<RetrospectiveModel[]>(this.url + 'Retro',
-    { params: new HttpParams().set('sprintId', sprintId.toString()) });
-  }
-
-  AddRetroComment(retroModel: RetrospectiveModel): Observable<boolean> {
-
+  AddSprint(retroModel: RetroSprintModal) {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
       })
     };
-
-    console.log(retroModel.message);
-    const urlis = this.url + 'Retrospective'; // this.addUrl;
-    return this._httpClient.post<boolean>(urlis, retroModel, httpOptions); // .pipe(catchError(this.handleError));
+    console.log(retroModel.ProjectName);
+    const urlis = this.url + this.addUrl; // this.addUrl;
+    debugger;
+    return this._httpClient.post<boolean>(urlis, retroModel, httpOptions);
   }
 
-
+  GetRetroCommentList(RetroToken: number): Observable<RetrospectiveModel[]> {
+    return this._httpClient.get<RetrospectiveModel[]>(this.url + this.addUrl,
+    { params: new HttpParams().set('RetroToken', RetroToken.toString()) });
+  }
 
   GetRandomColor() {
     const randomColor: CardColors[] = [{
@@ -63,7 +58,7 @@ export class RetrospectiveService implements OnInit {
     const colors = ['#faf3dd', '#f4acb7', '#74c69d', '#979dac', '#00bbf9',
       '#63b7af', '#f9c74f', '#fe938c', '#16697a', '#ed6a5a', '#706677', '#9d4edd',
       '#ff5d8f', '#1b998b', '#233d4d', '#f4f482'];
-    return '#2d313d';
+    return '#FF9800';
     // return colors[Math.floor(Math.random() * (999 - 0)) + 0];
   }
 }

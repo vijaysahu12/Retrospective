@@ -174,10 +174,35 @@ export class HubConnectionService {
 // ALTER TABLE [dbo].[RetroComments] CHECK CONSTRAINT [FK__RetroComm__Sprin__1F63A897]
 // GO
 
-// -- exec uspRetroGet 1
-// CREATE PROCEDURE uspRetroGet
-// @SprintId int
+
+
+// -- exec uspRetroGet 'testToken'
+// ALTER PROCEDURE uspRetroGet
+// @SprintToken varchar(50)
 // AS
 // BEGIN
-// 	select * From RetroCOmments where Sprintid = @SprintId
+// 	SELECT rc.* FROM RetroCOmments as rc
+// 	INNER JOIN RetroSprint as rs on rc.SprintId = rs.SprintId
+// 	WHERE rs.Token =  @SprintToken
 // END
+
+
+
+// ALTER PROCEDURE uspRetroAdd
+// 	@SprintToken varchar(50),
+// 	@ProjectName varchar(50),
+// 	@CreatedBy int
+// AS
+// BEGIN
+// 	IF NOT EXISTS (select * from RetroSprint where Token = @SprintToken )
+// 	begin
+// 		INSERT INTO RetroSprint (Token, Project , CreatedBy,CreatedDate) 
+// 		VALUES (@SprintToken , @ProjectName , @CreatedBy , GETDATE())
+// 		select 1 as Result
+// 	end
+// 	else 
+// 	begin
+// 		select 2 as Result
+// 	end
+// END
+ 

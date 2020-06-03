@@ -27,4 +27,10 @@ namespace Retro.SignalR.Modals
     wrong,
     action
   }
+
+  public class RetroSprintModal
+  {
+    public string SprintToken { get; set; }
+    public string ProjectName { get; set; }
+  }
 }

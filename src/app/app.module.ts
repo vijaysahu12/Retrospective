@@ -10,11 +10,14 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { FilterRetroListPipe } from './Pipes/filter-retro-list.pipe';
+import { RetroHomeComponent } from './Components/retro-home/retro-home.component';
+import { DatePipe } from '@angular/common';
 @NgModule({
   declarations: [
     AppComponent,
     RetrospectiveComponent,
-    FilterRetroListPipe
+    FilterRetroListPipe,
+    RetroHomeComponent
   ],
   imports: [
     BrowserModule,
@@ -23,7 +26,7 @@ import { FilterRetroListPipe } from './Pipes/filter-retro-list.pipe';
     HttpClientModule,
     BrowserAnimationsModule,
   ],
-  providers: [],
+  providers: [DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
