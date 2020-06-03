@@ -15,7 +15,7 @@ export class RetrospectiveService implements OnInit {
 
   ngOnInit() { }
 
-  AddSprint(retroModel: RetroSprintModal) {
+  AddSprint(retroModel: RetroSprintModal): Observable<number> {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
@@ -23,8 +23,7 @@ export class RetrospectiveService implements OnInit {
     };
     console.log(retroModel.ProjectName);
     const urlis = this.url + this.addUrl; // this.addUrl;
-    debugger;
-    return this._httpClient.post<boolean>(urlis, retroModel, httpOptions);
+    return this._httpClient.post<number>(urlis, retroModel, httpOptions);
   }
 
   GetRetroCommentList(RetroToken: number): Observable<RetrospectiveModel[]> {
@@ -58,7 +57,7 @@ export class RetrospectiveService implements OnInit {
     const colors = ['#faf3dd', '#f4acb7', '#74c69d', '#979dac', '#00bbf9',
       '#63b7af', '#f9c74f', '#fe938c', '#16697a', '#ed6a5a', '#706677', '#9d4edd',
       '#ff5d8f', '#1b998b', '#233d4d', '#f4f482'];
-    return '#FF9800';
+    return '#BD2130';
     // return colors[Math.floor(Math.random() * (999 - 0)) + 0];
   }
 }

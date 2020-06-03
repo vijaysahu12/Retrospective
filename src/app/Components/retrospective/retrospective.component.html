@@ -14,14 +14,17 @@
 
       </main>
       <footer>
-          <button [disabled]="startRetroSprint.SprintToken === '' || startRetroSprint.ProjectName === ''" (click)='onRetroStarted()'>Let's Start </button>
+          <button [disabled]="startRetroSprint.SprintToken === '' || startRetroSprint.ProjectName === ''"
+            (click)='onRetroStarted()'>
+            (Start/Join) the sprint retro!
+          </button>
       </footer>
   </caption>
 </section>
 
 
 
-<div *ngIf="retroStarted" style="background: rgb(189, 33, 48);">
+<div *ngIf="retroStarted" style="background: transparent;">
 
   <div class="sideNavigation" *ngIf="activeUserList.length > 0">
     <ul *ngFor='let item of activeUserList'>
@@ -82,7 +85,7 @@
 
             <div [@filterAnimation]='textEditorForWell' class="wentWellTextArea" *ngIf='textEditorForWell'>
               <textarea id="txtAreaWrong" class="border-1 textEditor" cols="50" rows="2" [(ngModel)]='textAreaValue'
-                placeholder='Comment' #textEditor (keyup.enter)='onTextEnter(textEditor.value , this.retroType.well)'>
+                placeholder='Retro Comment' #textEditor (keyup.enter)='onTextEnter(textEditor.value , this.retroType.well)'>
           </textarea>
               <!-- <button class="AddTextEditor" (click)='onTextEnter(textEditor.value)'>Add</button>
           <button class="closeTextEditor" (click)='toggle()'>Cancel</button> -->
@@ -139,7 +142,7 @@
 
             <div [@filterAnimation]='textEditorForWrong' class="wentWellTextArea" *ngIf='textEditorForWrong'>
               <textarea id="txtAreaWell" class="border-1 textEditor" cols="50" rows="2" [(ngModel)]='textAreaValue'
-                placeholder='Comment' #textEditor (keyup.enter)='onTextEnter(textEditor.value, this.retroType.wrong)'>
+                placeholder='Retro Comment' #textEditor (keyup.enter)='onTextEnter(textEditor.value, this.retroType.wrong)'>
               </textarea>
             </div>
           </div>

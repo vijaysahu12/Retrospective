@@ -15,7 +15,7 @@ namespace Retrospective
   {
     int CommentsAddOrUpdateOrDelete(RetroModel retro);
     List<RetroModel> RetroGet(string RetroToken);
-    bool RetroAdd(RetroSprintModal retro);
+    int RetroAdd(RetroSprintModal retro);
   }
   public class RetroService : IRetroService
   {
@@ -76,22 +76,23 @@ namespace Retrospective
       }
     }
 
-    public bool RetroAdd(RetroSprintModal retro)
+    public int RetroAdd(RetroSprintModal retro)
     {
       try
       {
         var result = _connectContext.uspRetroAddorUPpdate.FromSqlRaw("exec uspRetroAdd {0} , {1} , {2} ",
-            retro.ProjectName,
-            retro.SprintToken,
+
+          retro.SprintToken,
+          retro.ProjectName,
+
             1
-            ).ToList();
-        return result != null && result.FirstOrDefault().Result <=2;
+            ).ToList().FirstOrDefault();
+        return result.Result;
       }
       catch (Exception ex)
       {
-        return false;
+        return 0;
       }
     }
-
   }
 }

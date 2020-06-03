@@ -63,7 +63,6 @@ export class RetrospectiveComponent implements OnInit , OnDestroy {
   retroStarted = false;
 
   darkMode: boolean;
-  colorCodeIs: 'red';
   textAreaValue = '';
   textEditorForWell = false;
   textEditorForWrong = false;
@@ -75,6 +74,8 @@ export class RetrospectiveComponent implements OnInit , OnDestroy {
     ProjectName: '',
     SprintToken: ''
   };
+
+  SprintId: number;
   activeUserList: ActiveUser[] = [];
 
   constructor(private retroService: RetrospectiveService, private hubConnection: HubConnectionService , private datePipe: DatePipe) { }
@@ -87,11 +88,7 @@ export class RetrospectiveComponent implements OnInit , OnDestroy {
     this.datePipe.transform( new Date().getTime(), 'yyyy-MM-dd' )) {
       this.retroStarted = false;
     } else {
-      this.retroService.GetRetroCommentList(parseFloat(RetroToken)).subscribe(x => {
-        console.log('Got Comments from APi');
-        this.RetroCommentsList = x;
-        this.retroStarted = true;
-      });
+     this.GetRetroCommentList(RetroToken);
     }
 
     this.hubConnection.dataReceived.subscribe(msg => {
@@ -112,13 +109,21 @@ export class RetrospectiveComponent implements OnInit , OnDestroy {
       }
     });
     this.hubConnection.userReceived.subscribe(user => {
-      if (this.activeUserList.filter(x => x.userName !== user)) {
+      if (this.activeUserList.filter(x => x.userName !== user).length < 0) {
         this.activeUserList.push({
           userName: user,
           profileImage: ''
         });
         this.activeUserList = this.activeUserList;
       }
+    });
+  }
+  GetRetroCommentList(RetroToken: string) {
+    console.log('SprintToken: ' + RetroToken);
+    this.retroService.GetRetroCommentList(parseFloat(RetroToken)).subscribe(x => {
+      console.log('Got Comments from APi');
+      this.RetroCommentsList = x;
+      this.retroStarted = true;
     });
   }
 
@@ -146,7 +151,7 @@ export class RetrospectiveComponent implements OnInit , OnDestroy {
         commentId: 0,
         token: '',
         message: event,
-        sprintId: 1,
+        sprintId: this.SprintId,
         createdBy: 1,
         editable: true,
         type: retType,
@@ -264,7 +269,11 @@ export class RetrospectiveComponent implements OnInit , OnDestroy {
     localStorage.setItem('retroStarted.ExpiryDate', new Date().toString());
 
     this.startRetroSprint.SprintToken = this.startRetroSprint.SprintToken.toString();
-    this.retroService.AddSprint(this.startRetroSprint).subscribe(res => console.log('sprint add : ' + res));
+    this.retroService.AddSprint(this.startRetroSprint).subscribe(res =>{
+      console.log('SprintId  : ' + res);
+      this.SprintId = res;
+      this.GetRetroCommentList(this.startRetroSprint.SprintToken);
+    });
   }
 }
 

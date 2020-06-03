@@ -187,22 +187,23 @@ export class HubConnectionService {
 // END
 
 
-
 // ALTER PROCEDURE uspRetroAdd
 // 	@SprintToken varchar(50),
 // 	@ProjectName varchar(50),
 // 	@CreatedBy int
 // AS
 // BEGIN
-// 	IF NOT EXISTS (select * from RetroSprint where Token = @SprintToken )
-// 	begin
+// 	IF NOT EXISTS (select top 1 1 from RetroSprint where Token = @SprintToken )
+// 	BEGIN
 // 		INSERT INTO RetroSprint (Token, Project , CreatedBy,CreatedDate) 
 // 		VALUES (@SprintToken , @ProjectName , @CreatedBy , GETDATE())
-// 		select 1 as Result
+// 		SELECT SCOPE_IDENTITY() as Result
 // 	end
 // 	else 
 // 	begin
-// 		select 2 as Result
+// 		SELECT SprintId  as Result from RetroSprint where Token = @SprintToken
 // 	end
 // END
+ 
+  
  
